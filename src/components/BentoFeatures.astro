@@ -1,0 +1,380 @@
+---
+// BentoFeatures.astro - Combined showcase and features bento grid
+---
+
+<section class="bento-section">
+    <div class="bento-header">
+        <h2 class="bento-title">
+            Logia <span class="highlight">supercharges</span> your learning
+        </h2>
+        <p class="bento-subtitle">
+            Powerful features for technical content creators and knowledge
+            workers.
+        </p>
+    </div>
+
+    <div class="bento-grid">
+        <!-- Audio Notes (Showcase - Large) -->
+        <div class="bento-card bento-showcase">
+            <div class="card-media">
+                <img src="/recording.gif" alt="Audio capture demo" />
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Audio Capture & Transcription</h3>
+                <p class="card-desc">
+                    Record lectures, meetings, and thoughts. Whisper AI
+                    transcribes everything locally, keeping your data private
+                    while making every word searchable.
+                </p>
+            </div>
+        </div>
+
+        <!-- Canvas (Showcase - Large) -->
+        <div class="bento-card bento-showcase">
+            <div class="card-media-canvas">
+                <img src="/canvas10.png" alt="Canvas Showcase" />
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Infinite Canvas</h3>
+                <p class="card-desc">
+                    Think visually with our TLDRAW-powered canvas. Sketch
+                    diagrams, connect ideas, and create visual maps of your
+                    knowledge.
+                </p>
+            </div>
+        </div>
+
+        <!-- AI-Powered -->
+        <div class="bento-card bento-medium ai-card">
+            <div class="ai-card-content">
+                <h3 class="card-title">AI-Powered</h3>
+                <p class="card-desc">
+                    Integrated with Google Gemini for intelligent note
+                    assistance.More models soon ;)
+                </p>
+            </div>
+            <div class="gemini-icon">
+                <img src="/gemini-color.svg" alt="Gemini" />
+            </div>
+        </div>
+
+        <!-- Block Editor -->
+        <div class="bento-card bento-medium editor-card">
+            <div class="editor-card-content">
+                <h3 class="card-title">Block-Based Editor</h3>
+                <p class="card-desc">
+                    Full-featured with Notion-like <code>/</code> commands. Create
+                    structured content effortlessly.
+                </p>
+            </div>
+            <div class="editor-card-image">
+                <img src="/commands.png" alt="Slash commands" />
+            </div>
+        </div>
+
+        <!-- Fast Search -->
+        <div class="bento-card bento-small">
+            <h3 class="card-title">Fuzzy Search</h3>
+            <p class="card-desc">Seach and switch notes at lightning speeds.</p>
+        </div>
+
+        <!-- Kanban -->
+        <div class="bento-card bento-small">
+            <h3 class="card-title">Kanban Boards</h3>
+            <p class="card-desc">Visual task management with drag-and-drop.</p>
+        </div>
+
+        <!-- Lightning Fast -->
+        <div class="bento-card bento-small">
+            <h3 class="card-title">Lightning Fast</h3>
+            <p class="card-desc">
+                Only 150-200MB RAM Usage. Quick launch times.
+            </p>
+        </div>
+
+        <!-- Markdown -->
+        <div class="bento-card bento-small">
+            <h3 class="card-title">Markdown Support</h3>
+            <p class="card-desc">Full GFM support with live preview.</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .bento-section {
+        padding: 6rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .bento-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .bento-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        color: white;
+        margin: 0 0 1rem 0;
+        letter-spacing: -0.02em;
+    }
+
+    .bento-title .highlight {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .bento-subtitle {
+        font-size: 1.125rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+    }
+
+    .bento-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bento-card:hover {
+        background: rgba(191, 110, 110, 0.06);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .bento-card.accent {
+        background: linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.15) 0%,
+            rgba(139, 92, 246, 0.15) 100%
+        );
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    /* Showcase cards - large with media area */
+    .bento-showcase {
+        grid-column: span 2;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bento-showcase .card-media {
+        height: 200px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 16px 16px 0 0;
+        overflow: hidden;
+    }
+
+    .bento-showcase .card-media img {
+        width: 100%;
+        height: auto;
+        object-fit: fill;
+        object-position: center top;
+        margin-top: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .bento-showcase:hover .card-media img {
+        transform: scale(1.05);
+    }
+
+    /* Canvas card media - separate styling */
+    .card-media-canvas {
+        height: 200px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 16px 16px 0 0;
+        overflow: hidden;
+    }
+
+    .card-media-canvas img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: center bottom;
+        transition: transform 0.3s ease;
+    }
+
+    .bento-showcase:hover .card-media-canvas img {
+        transform: scale(1.05);
+    }
+
+    .gif-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.1) 0%,
+            rgba(139, 92, 246, 0.1) 100%
+        );
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 16px 16px 0 0;
+    }
+
+    .gif-placeholder span {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .bento-showcase .card-content {
+        padding: 1.5rem;
+    }
+
+    .bento-medium {
+        grid-column: span 2;
+    }
+
+    .bento-small {
+        grid-column: span 1;
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: white;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .bento-showcase .card-title {
+        font-size: 1.35rem;
+    }
+
+    .card-desc {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .card-desc code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.1em 0.4em;
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+
+    .bento-small .card-title {
+        font-size: 1rem;
+    }
+
+    .bento-small .card-desc {
+        font-size: 0.8rem;
+    }
+
+    /* AI Card with Gemini Icon */
+    .ai-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .ai-card-content {
+        flex: 1;
+    }
+
+    .gemini-icon {
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+    }
+
+    .gemini-icon img {
+        width: 100%;
+        height: 100%;
+        animation: gemini-spin 4s ease-in-out infinite;
+    }
+
+    @keyframes gemini-spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(360deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Editor Card with Commands Image */
+    .editor-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .editor-card-content {
+        flex: 1;
+    }
+
+    .editor-card-image {
+        width: 220px;
+        height: auto;
+        flex-shrink: 0;
+        margin-right: -1.5rem;
+    }
+
+    .editor-card-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px 0 0 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .bento-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .bento-showcase {
+            grid-column: span 2;
+        }
+
+        .bento-medium {
+            grid-column: span 2;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .bento-section {
+            padding: 4rem 1rem;
+        }
+
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .bento-showcase,
+        .bento-medium,
+        .bento-small {
+            grid-column: span 1;
+        }
+
+        .bento-showcase .card-media {
+            height: 180px;
+        }
+    }
+</style>

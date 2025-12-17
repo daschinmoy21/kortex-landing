@@ -7,13 +7,18 @@ import Background from "../components/Background";
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/png" href="/logo2.png" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Kortex</title>
+		<title>Logia</title>
 	</head>
 	<body>
 		<Background client:load />
-		<slot />
+		<div class="fade-in-nav">
+			<slot name="header" />
+		</div>
+		<main class="fade-in">
+			<slot />
+		</main>
 	</body>
 </html>
 
@@ -23,8 +28,46 @@ import Background from "../components/Background";
 		margin: 0;
 		width: 100%;
 		height: 100%;
+		overflow-x: hidden;
 	}
 	body {
 		background: transparent;
+	}
+	/* Main content fade with movement and blur */
+	.fade-in {
+		animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+		opacity: 0;
+	}
+	/* Nav fade only opacity to prevent fixed positioning issues */
+	.fade-in-nav {
+		animation: fadeInNav 1.2s ease-out forwards;
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 9999;
+	}
+
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+			filter: blur(10px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+			filter: blur(0);
+		}
+	}
+
+	@keyframes fadeInNav {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
 	}
 </style>
