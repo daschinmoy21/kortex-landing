@@ -1,0 +1,33 @@
+---
+import Content3 from "fulldev-ui/blocks/Content3.astro";
+---
+
+<div class="content-section">
+  <Content3
+    heading="An Infinite Canvas - BUILT IN"
+    paragraph="Create a canvas as a note for designing, brainstorming or teaching anything - DSA, System Design or a quick drawing break."
+    image={{ src: "/hero4.png", class: "w-full max-w-5xl mx-auto" }}
+    content=`
+    <h3></h3>
+    <p>An unrestricted canvas powered by TLDRAW</p>
+  `
+  />
+</div>
+
+<style>
+  .content-section :global(*) {
+    color: white;
+  }
+  .content-section :global(h1),
+  .content-section :global(h2),
+  .content-section :global(h3),
+  .content-section :global(p),
+  .content-section :global(li) {
+    color: white;
+  }
+  .content-section :global(img) {
+    width: 100%;
+    max-width: 2200px;
+    height: auto;
+  }
+</style>

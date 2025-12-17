@@ -14,7 +14,7 @@ export default function Background() {
     }}>
       <ColorBends
         style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-        colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
+        colors={["#f18196ff", "#8a5cff", "#09201dff"]}
         rotation={120}
         speed={0.3}
         scale={1}

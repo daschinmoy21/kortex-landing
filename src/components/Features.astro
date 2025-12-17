@@ -1,28 +1,42 @@
 ---
-import Features1 from 'fulldev-ui/blocks/Features1.astro'
+import Features1 from "fulldev-ui/blocks/Features1.astro";
 ---
 
-<Features1
-  heading="Features designed for YOU"
-  paragraph="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-  cards={[
-    {
-      icon: 'rocket',
-      heading: 'Lorem ipsum',
-      paragraph: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      button: { text: 'Lorem ipsum', href: '' },
-    },
-    {
-      icon: 'pencil',
-      heading: 'Lorem ipsum',
-      paragraph: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      button: { text: 'Lorem ipsum', href: '' },
-    },
-    {
-      icon: 'typography',
-      heading: 'Lorem ipsum',
-      paragraph: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-      button: { text: 'Lorem ipsum', href: '' },
-    },
-  ]}
-/>
+<div class="features-section">
+  <Features1
+    heading="Features designed for YOU"
+    paragraph="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+    cards={[
+      {
+        icon: "rocket",
+        heading: "Lorem ipsum",
+        paragraph: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+        button: { text: "Lorem ipsum", href: "" },
+      },
+      {
+        icon: "pencil",
+        heading: "Lorem ipsum",
+        paragraph: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+        button: { text: "Lorem ipsum", href: "" },
+      },
+      {
+        icon: "typography",
+        heading: "Lorem ipsum",
+        paragraph: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+        button: { text: "Lorem ipsum", href: "" },
+      },
+    ]}
+  />
+</div>
+
+<style>
+  .features-section :global(*) {
+    color: white;
+  }
+  .features-section :global(h1),
+  .features-section :global(h2),
+  .features-section :global(h3),
+  .features-section :global(p) {
+    color: white;
+  }
+</style>
