@@ -37,6 +37,8 @@ import Background from "../components/Background";
 	.fade-in {
 		animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 		opacity: 0;
+		will-change: opacity, transform, filter;
+		backface-visibility: hidden;
 	}
 	/* Nav fade only opacity to prevent fixed positioning issues */
 	.fade-in-nav {
