@@ -57,7 +57,8 @@ import Footer from "../components/Footer.astro";
                     <div class="download-row">
                         <span>Apple Silicon</span>
                         <div class="download-meta">
-                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.5/logia_0.9.5_aarch64.dmg"
+                            <a
+                                href="/mac-instructions"
                                 class="download-link"
                                 aria-label="Download for Apple Silicon"
                             >
@@ -77,23 +78,7 @@ import Footer from "../components/Footer.astro";
                     </div>
                 </div>
                 <div class="mac-info">
-                    <p class="req-text">Requires macOS 26+</p>
-                    <div class="warning-box">
-                        <p>
-                            ⚠️ Note: The Mac version may have issues as I do not
-                            have a Mac to test and build.
-                        </p>
-                    </div>
-                    <div class="command-box">
-                        <p class="cmd-label">Run before opening:</p>
-                        <code
-                            >xattr -cr ~/Downloads/logia_0.9.5_aarch64.dmg</code
-                        >
-                    </div>
-                    <p class="dev-note">
-                        (Required because I don't have an Apple Developer
-                        Account yet)
-                    </p>
+                    <p class="req-text">Requires macOS 11+</p>
                 </div>
             </div>
 

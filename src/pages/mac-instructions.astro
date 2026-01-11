@@ -1,0 +1,251 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HeroHeader from "../components/HeroHeader.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout>
+    <HeroHeader slot="header" />
+
+    <div class="instructions-container">
+        <div class="content-wrapper">
+            <h1 class="title">Installing Logia on macOS</h1>
+            <p class="subtitle">Your download should start automatically...</p>
+            <p class="download-manual">
+                If it doesn't, <a href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.5/logia_0.9.5_aarch64.dmg" class="link">click here to download manually</a>.
+            </p>
+
+            <div class="warning-section">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-content">
+                    <h3>Important: App is Unsigned</h3>
+                    <p>
+                        I do not have an Apple Developer Account yet, so the app is not signed. 
+                        macOS will prevent it from running unless you follow these steps.
+                    </p>
+                </div>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Clear Quarantine Attribute</h3>
+                        <p>Run this command in Terminal after downloading:</p>
+                        <div class="command-box">
+                            <code>xattr -cr ~/Downloads/logia_0.9.5_aarch64.dmg</code>
+                            <button class="copy-btn" aria-label="Copy to clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Install the App</h3>
+                        <p>Open the DMG file and drag <strong>Logia</strong> to your <strong>Applications</strong> folder.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Clear App Attributes</h3>
+                        <p>Run this final command to allow the app to run:</p>
+                        <div class="command-box">
+                            <code>xattr -cr /Applications/Logia.app</code>
+                            <button class="copy-btn" aria-label="Copy to clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/downloads" class="back-link">← Back to Downloads</a>
+        </div>
+    </div>
+    <Footer />
+</Layout>
+
+<script>
+    // Auto-trigger download
+    window.onload = function() {
+        setTimeout(function() {
+            window.location.href = "https://github.com/daschinmoy21/Logia/releases/download/v0.9.5/logia_0.9.5_aarch64.dmg";
+        }, 1000);
+    };
+
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+             const code = btn.previousElementSibling?.textContent;
+             if (code) {
+                 navigator.clipboard.writeText(code);
+                 const originalIcon = btn.innerHTML;
+                 btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                 setTimeout(() => {
+                     btn.innerHTML = originalIcon;
+                 }, 2000);
+             }
+        });
+    });
+</script>
+
+<style>
+    .instructions-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 5rem 2rem 2rem;
+        min-height: 80vh;
+        font-family: "Iosevka", sans-serif;
+        color: white;
+    }
+
+    .content-wrapper {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        backdrop-filter: blur(12px);
+    }
+
+    .title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .subtitle {
+        text-align: center;
+        opacity: 0.8;
+        font-size: 1.1rem;
+    }
+
+    .download-manual {
+        text-align: center;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 2rem;
+    }
+
+    .link {
+        color: #60a5fa;
+        text-decoration: underline;
+    }
+
+    .warning-section {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .warning-icon {
+        font-size: 1.5rem;
+    }
+
+    .warning-content h3 {
+        margin: 0 0 0.5rem 0;
+        color: #fbbf24;
+        font-size: 1.1rem;
+    }
+
+    .warning-content p {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .step {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .step-number {
+        background: rgba(255, 255, 255, 0.1);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step-content h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .step-content p {
+        margin: 0 0 0.75rem 0;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+    }
+
+    .command-box {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        padding: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .command-box code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        color: #ef4444;
+        word-break: break-all;
+    }
+
+    .copy-btn {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 1rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover {
+        color: white;
+    }
+</style>
