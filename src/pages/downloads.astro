@@ -57,9 +57,8 @@ import Footer from "../components/Footer.astro";
                     <div class="download-row">
                         <span>Apple Silicon</span>
                         <div class="download-meta">
-                            <span class="size">15.5 MB</span>
                             <a
-                                href="#"
+                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.4/logia_0.9.4_aarch64.dmg"
                                 class="download-link"
                                 aria-label="Download for Apple Silicon"
                             >
@@ -77,6 +76,25 @@ import Footer from "../components/Footer.astro";
                             </a>
                         </div>
                     </div>
+                </div>
+                <div class="mac-info">
+                    <p class="req-text">Requires macOS 26+</p>
+                    <div class="warning-box">
+                        <p>
+                            ⚠️ Note: The Mac version may have issues as I do not
+                            have a Mac to test and build.
+                        </p>
+                    </div>
+                    <div class="command-box">
+                        <p class="cmd-label">Run before opening:</p>
+                        <code
+                            >xattr -cr ~/Downloads/logia_0.9.4_aarch64.dmg</code
+                        >
+                    </div>
+                    <p class="dev-note">
+                        (Required because I don't have an Apple Developer
+                        Account yet)
+                    </p>
                 </div>
             </div>
 
@@ -96,13 +114,34 @@ import Footer from "../components/Footer.astro";
                 </div>
                 <div class="download-options">
                     <div class="download-row">
-                        <span>x86 Setup.exe</span>
+                        <span>x64 Setup.exe</span>
                         <div class="download-meta">
-                            <span class="size">15.5 MB</span>
                             <a
-                                href="#"
+                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.4/logia_0.9.4_x64-setup.exe"
                                 class="download-link"
-                                aria-label="Download for Apple Silicon"
+                                aria-label="Download for Windows"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    class="download-icon"
+                                >
+                                    <path
+                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
+                                    ></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="download-row">
+                        <span>x64 MSI (.msi)</span>
+                        <div class="download-meta">
+                            <a
+                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.4/logia_0.9.4_x64_en-US.msi"
+                                class="download-link"
+                                aria-label="Download Windows MSI"
                             >
                                 <svg
                                     viewBox="0 0 24 24"
@@ -137,48 +176,12 @@ import Footer from "../components/Footer.astro";
                 </div>
                 <div class="download-options">
                     <div class="download-row">
-                        <span>RPM (.rpm)</span>
-                        <div class="download-meta">
-                            <span class="size">17.7 MB</span>
-                            <a href="#" class="download-link">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    class="download-icon"
-                                >
-                                    <path
-                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    ></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="download-row">
                         <span>AppImage</span>
                         <div class="download-meta">
-                            <span class="size">90.3 MB</span>
-                            <a href="#" class="download-link">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    class="download-icon"
-                                >
-                                    <path
-                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    ></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="download-row">
-                        <span>Debian (.deb)</span>
-                        <div class="download-meta">
-                            <span class="size">17.7 MB</span>
-                            <a href="#" class="download-link">
+                            <a
+                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.4/logia_0.9.4_amd64.AppImage"
+                                class="download-link"
+                            >
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
@@ -293,16 +296,16 @@ import Footer from "../components/Footer.astro";
     .platforms-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+        gap: 1rem;
         width: 100%;
-        max-width: 900px;
+        max-width: 800px;
     }
 
     .platform-card {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1rem;
         backdrop-filter: blur(12px);
         display: flex;
         flex-direction: column;
@@ -312,8 +315,8 @@ import Footer from "../components/Footer.astro";
     .card-header {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 2rem;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
     }
 
     .platform-icon {
@@ -332,7 +335,7 @@ import Footer from "../components/Footer.astro";
     .download-options {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
     }
 
     .download-row {
@@ -373,6 +376,63 @@ import Footer from "../components/Footer.astro";
     .coming-soon {
         color: rgba(255, 255, 255, 0.4);
         font-size: 0.9rem;
+    }
+
+    /* Mac Info */
+    .mac-info {
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .req-text {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.75rem;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.2);
+        padding: 0.5rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.85rem;
+    }
+
+    .warning-box p {
+        margin: 0;
+    }
+
+    .command-box {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.5rem;
+        border-radius: 6px;
+    }
+
+    .cmd-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .command-box code {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        color: #ef4444;
+        word-break: break-all;
+        user-select: all;
+    }
+
+    .dev-note {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 0.5rem;
+        font-style: italic;
     }
 
     @media (max-width: 768px) {

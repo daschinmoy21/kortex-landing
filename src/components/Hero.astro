@@ -4,25 +4,17 @@ import Hero1 from "fulldev-ui/blocks/Hero1.astro";
 
 <Hero1
   dark
-  class="bg-transparent"
+  class="bg-transparent pt-40"
   heading=" The Intelligent, Open-Source Notes App"
   paragraph="AI-powered writing assistance, in-built canvas for visual thinking, and audio transcription built right in. <br>Free, fast, and cross-platform."
   buttons={[
     {
-      text: "Windows",
-      icon: "brand-windows-filled",
-      class: "bg-zinc-300 text-black hover:bg-zinc-900 hover:text-white",
-    },
-    {
-      text: "MacOS",
-      icon: "brand-apple-filled",
-      class: "bg-zinc-300 text-black hover:bg-zinc-900 hover:text-white",
-    },
-    {
-      text: "Linux",
-      icon: "brand-debian",
-      class: "bg-zinc-300 text-black hover:bg-zinc-900 hover:text-white",
+      text: "Download",
+      href: "/downloads",
+      icon: "download",
+      class:
+        "bg-white text-black hover:bg-zinc-200 font-semibold px-6 py-3 rounded-lg transition-colors",
     },
   ]}
-  image={{ src: "/hero-final.png", class: "mx-auto w-full rounded-lg" }}
+  image={{ src: "/hero-final.png", class: "mx-auto mt-24 w-full rounded-lg" }}
 />:
