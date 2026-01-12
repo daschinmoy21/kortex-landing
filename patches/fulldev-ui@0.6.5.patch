@@ -1,0 +1,13 @@
+diff --git a/src/integration/index.ts b/src/integration/index.ts
+index a3ce4956ef81264deb71442be19acc6c9d2e3dae..eef51ef9c41db3096e0221dfb9e98368a5650e40 100644
+--- a/src/integration/index.ts
++++ b/src/integration/index.ts
+@@ -68,7 +68,7 @@ export default function fulldevIntegration(
+           },
+           integrations: [
+             mdx(),
+-            sitemap(),
++            // sitemap(),
+             robotsTxt(),
+             liveCode({
+               layout: '/src/structures/Code.astro',

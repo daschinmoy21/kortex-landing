@@ -6,6 +6,7 @@
       "name": "logia-landing",
       "dependencies": {
         "@astrojs/react": "^4.4.2",
+        "@astrojs/sitemap": "^3.6.1",
         "@types/react": "^19.2.7",
         "@types/react-dom": "^19.2.3",
         "astro": "^4.16.14",
@@ -15,6 +16,9 @@
         "three": "^0.182.0",
       },
     },
+  },
+  "patchedDependencies": {
+    "fulldev-ui@0.6.5": "patches/fulldev-ui@0.6.5.patch",
   },
   "packages": {
     "@alloc/quick-lru": ["@alloc/quick-lru@5.2.0", "", {}, "sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw=="],
