@@ -26,15 +26,15 @@ const { command } = Astro.props;
 </script>
 
 <style>
+  /* Sits in a .well, so 8px radius; the button is inset 4px, so 4px. */
   .command {
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-height: 48px;
-    padding: 6px 6px 6px 14px;
+    gap: var(--s-100);
+    padding: var(--s-50) var(--s-50) var(--s-50) var(--s-100);
     border-radius: 8px;
-    background: rgb(18 17 16 / 0.7);
-    font: 400 14px/1.4 var(--mono);
+    background: var(--bg-0);
+    font: 400 14px/20px var(--mono);
   }
 
   .prompt {
@@ -52,19 +52,23 @@ const { command } = Astro.props;
 
   .copy {
     flex: none;
-    min-height: 34px;
-    padding: 0 10px;
-    border: 1px solid var(--ink-700);
-    border-radius: 5px;
-    background: transparent;
-    color: var(--ink-300);
-    font: 500 12px/1 var(--mono);
+    padding: var(--s-75) var(--s-100);
+    border: 0;
+    border-radius: 4px;
+    background: var(--bg-3);
+    color: var(--ink-100);
+    font: 600 12px/16px var(--sans);
     cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
+    transition:
+      background-color 300ms var(--curve),
+      transform 500ms var(--curve);
   }
 
   .copy:hover {
-    background: var(--ink-800);
-    color: var(--ink-100);
+    background: var(--bg-4);
+  }
+
+  .copy:active {
+    transform: scale(0.98);
   }
 </style>

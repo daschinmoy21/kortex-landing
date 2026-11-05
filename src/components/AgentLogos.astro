@@ -1,0 +1,46 @@
+---
+import { agents } from "../data/agents";
+
+const { class: className = "" } = Astro.props;
+---
+
+<ul class={`logos ${className}`}>
+  {
+    agents.map((agent) => (
+      <li class="title-4">
+        <span class="logo" aria-hidden="true" set:html={agent.logo} />
+        {agent.name}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-100) var(--s-300);
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-75);
+    color: var(--ink-100);
+    white-space: nowrap;
+  }
+
+  .logo {
+    display: inline-flex;
+    flex: none;
+    width: var(--s-200);
+    height: var(--s-200);
+  }
+
+  .logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

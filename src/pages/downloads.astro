@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import HeroHeader from "../components/HeroHeader.astro";
 import Footer from "../components/Footer.astro";
 import CopyCommand from "../components/CopyCommand.astro";
+import Icon from "../components/Icon.astro";
 import { installers, links, nixMainCommand, release } from "../data/release";
 
 const platforms = [
@@ -28,28 +29,28 @@ const platforms = [
   <HeroHeader slot="header" />
 
   <div class="wrap page">
-    <h1 class="heading">Download Logia</h1>
+    <h1 class="heading-3 md:heading-2">Download Logia</h1>
 
-    <section class="latest" id="main">
+    <section class="latest card" id="main">
       <div>
-        <h2>Latest from main, with Nix</h2>
-        <p>
+        <h2 class="title-2">Latest from main, with Nix</h2>
+        <p class="body-6 muted">
           Pulls the main branch and builds it from source. You get the newest work first, including what hasn't reached a
           release yet, and it's the least tested way to run Logia.
         </p>
       </div>
-      <div class="well"><CopyCommand command={nixMainCommand} /></div>
+      <div class="inset"><CopyCommand command={nixMainCommand} /></div>
     </section>
 
     <section class="installers">
       <div class="head">
-        <h2>Installers</h2>
-        <span>v{release.version} · {release.date}</span>
+        <h2 class="title-2">Installers</h2>
+        <span class="caption-5 quiet mono">v{release.version} · {release.date}</span>
       </div>
 
       {
         !release.current && (
-          <p class="notice">
+          <p class="notice body-6">
             <b>These are an older build.</b> They have the previous interface, and no Vim mode or agent panel yet. New
             installers are on the way.
           </p>
@@ -59,17 +60,16 @@ const platforms = [
       <div class="platforms">
         {
           platforms.map((platform) => (
-            <div class="platform">
-              <h3>
-                {platform.name} <span>{platform.note}</span>
-              </h3>
+            <div class="platform card">
+              <h3 class="title-3">{platform.name}</h3>
+              <p class="caption-5 quiet mono">{platform.note}</p>
               <ul>
                 {platform.rows.map((row) => (
                   <li>
-                    <a href={row.href} {...(row.external ? { rel: "noopener noreferrer" } : {})}>
+                    <a href={row.href} class="body-6" {...(row.external ? { rel: "noopener noreferrer" } : {})}>
                       <span>{row.label}</span>
-                      <span class="size">{row.size}</span>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
+                      <span class="size caption-5 mono">{row.size}</span>
+                      <Icon name="download" />
                     </a>
                   </li>
                 ))}
@@ -80,7 +80,7 @@ const platforms = [
       </div>
     </section>
 
-    <p class="more">
+    <p class="more body-6 muted">
       Audio transcription also needs Python 3.12+ and FFmpeg. Every release is on
       <a class="link" href={links.releases} target="_blank" rel="noopener noreferrer">GitHub</a>.
     </p>
@@ -91,45 +91,29 @@ const platforms = [
 
 <style>
   .page {
-    max-width: calc(880px + 2 * var(--gutter));
-    min-height: calc(100dvh - 120px);
-    padding-block: clamp(48px, 8vw, 88px);
-  }
-
-  h2 {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
+    max-width: calc(960px + 2 * var(--gutter));
+    min-height: 80dvh;
+    padding-block: var(--s-900);
   }
 
   .latest {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-    margin-top: 32px;
-    padding: 20px;
-    border: 1px solid var(--ink-800);
-    border-radius: 12px;
-    background: var(--ink-950);
+    gap: var(--s-200);
+    margin-top: var(--s-400);
+    padding: var(--s-75);
+  }
+
+  .latest > div:first-child {
+    padding: var(--s-200) var(--s-200) 0;
   }
 
   .latest p {
-    margin-top: 6px;
-    max-width: 62ch;
-    color: var(--ink-400);
-    font-size: 15px;
-  }
-
-  .well {
-    padding: 6px;
-    border: 1px solid var(--ink-800);
-    border-radius: 12px;
-    background: var(--ink-900);
+    margin-top: var(--s-50);
+    max-width: 680px;
   }
 
   .installers {
-    margin-top: 48px;
+    margin-top: var(--s-600);
   }
 
   .head {
@@ -137,88 +121,66 @@ const platforms = [
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 4px 16px;
-  }
-
-  .head span {
-    color: var(--ink-500);
-    font: 400 12px/1.3 var(--mono);
+    gap: var(--s-50) var(--s-200);
   }
 
   .notice {
-    margin-top: 14px;
-    padding: 10px 14px;
-    border: 1px solid rgb(244 122 53 / 0.3);
-    border-radius: 8px;
-    background: rgb(244 122 53 / 0.06);
-    color: var(--ink-300);
-    font-size: 14px;
-  }
-
-  .notice b {
-    color: var(--ember-300);
-    font-weight: 600;
+    margin-top: var(--s-200);
   }
 
   .platforms {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-    margin-top: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--s-200);
+    margin-top: var(--s-200);
+  }
+
+  .platform {
+    padding: var(--s-75);
+  }
+
+  h3,
+  .platform > p {
+    padding-inline: var(--s-100);
   }
 
   h3 {
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  h3 span {
-    display: block;
-    color: var(--ink-500);
-    font: 400 12px/1.5 var(--mono);
+    padding-top: var(--s-100);
   }
 
   ul {
-    margin-top: 10px;
+    display: grid;
+    gap: var(--s-50);
+    margin-top: var(--s-100);
   }
 
   li a {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    border-top: 1px solid var(--ink-800);
+    gap: var(--s-75);
+    padding: var(--s-100);
+    border-radius: 8px;
     color: var(--ink-200);
-    font-size: 14px;
-    transition: color 0.12s;
+    transition:
+      background-color 300ms var(--curve),
+      transform 500ms var(--curve);
   }
 
   li a:hover {
-    color: var(--ember-300);
+    background: var(--bg-3);
+  }
+
+  li a:active {
+    transform: scale(0.98);
   }
 
   .size {
     margin-left: auto;
     color: var(--ink-500);
-    font: 400 12px/1 var(--mono);
     white-space: nowrap;
   }
 
-  svg {
-    flex: none;
-    width: 14px;
-    height: 14px;
-  }
-
   .more {
-    margin-top: 32px;
-    color: var(--ink-400);
-    font-size: 14px;
-  }
-
-  @media (max-width: 720px) {
-    .platforms {
-      grid-template-columns: minmax(0, 1fr);
-    }
+    margin-top: var(--s-400);
   }
 </style>

@@ -1,71 +1,242 @@
 ---
 import { links } from "../data/release";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const onDownloads = path === "/downloads";
+
+const sections = [
+  { href: "/#agents", label: "Agents" },
+  { href: "/#keyboard", label: "Keyboard" },
+  { href: "/#everything", label: "Features" },
+  { href: "/#faq", label: "FAQ" },
+];
 ---
 
 <header class="bar">
-  <div class="wrap row">
-    <a href="/" class="mark">Logia</a>
-    <nav aria-label="Main">
-      <a href="/#keyboard" class="item hide-narrow">Keyboard</a>
-      <a href="/#agents" class="item hide-narrow">Agents</a>
-      <a href="/#everything" class="item hide-narrow">Features</a>
-      <a href={links.repo} class="item" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="/downloads" class="btn btn-primary compact">Download</a>
+  <div class="pill">
+    <a href="/" class="mark" aria-current={path === "/" ? "page" : undefined}>Logia</a>
+    <nav aria-label="Main" class="links">
+      {sections.map((item) => <a href={item.href} class="item title-4">{item.label}</a>)}
+      <a href={links.repo} class="item title-4" target="_blank" rel="noopener noreferrer">GitHub</a>
     </nav>
+    <a href="/downloads" class="btn btn-sm btn-primary" aria-current={onDownloads ? "page" : undefined}>Download</a>
+    <button type="button" class="toggle" data-menu-toggle aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
   </div>
 </header>
+
+<!-- A sibling of the bar: the bar's backdrop filter would otherwise trap this fixed panel inside it. -->
+<div id="menu" class="menu" data-menu inert>
+  <nav aria-label="Menu">
+    {sections.map((item) => <a href={item.href} class="heading-4">{item.label}</a>)}
+    <a href={links.repo} class="heading-4" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </nav>
+</div>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+
+  function setOpen(open: boolean) {
+    if (!toggle || !menu) return;
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menu.classList.toggle("open", open);
+    menu.inert = !open;
+    document.documentElement.style.overflow = open ? "hidden" : "";
+  }
+
+  toggle?.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+  menu?.addEventListener("click", (event) => {
+    if ((event.target as HTMLElement).closest("a")) setOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  // Rotating a phone or widening the window past the breakpoint must not leave the page scroll locked.
+  matchMedia("(min-width: 768px)").addEventListener("change", (event) => {
+    if (event.matches) setOpen(false);
+  });
+</script>
 
 <style>
   .bar {
     position: sticky;
-    top: 0;
+    top: var(--s-100);
     z-index: 50;
-    border-bottom: 1px solid var(--ink-800);
-    background: var(--ink-925);
+    display: flex;
+    justify-content: center;
+    height: 0;
+    padding-inline: var(--s-75);
   }
 
-  .row {
+  /* 16px outer radius with 8px padding gives the 8px button radius (B3). */
+  .pill {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 52px;
+    gap: var(--s-50);
+    height: fit-content;
+    padding: var(--s-75);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: rgb(24 24 24 / 0.72);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
   }
 
   .mark {
-    font: 700 15px/1 var(--mono);
+    padding: var(--s-75) var(--s-100);
+    border-radius: 8px;
+    font: 600 14px/20px var(--sans);
     letter-spacing: -0.01em;
+    transition: background-color 300ms var(--curve);
   }
 
-  nav {
-    display: flex;
+  .mark:hover {
+    background: var(--bg-3);
+  }
+
+  .links {
+    display: none;
     align-items: center;
-    gap: 2px;
+    gap: var(--s-50);
+    margin-right: var(--s-100);
   }
 
   .item {
-    padding: 8px 10px;
-    border-radius: 6px;
+    padding: var(--s-75) var(--s-100);
+    border-radius: 8px;
     color: var(--ink-400);
-    font-size: 14px;
-    line-height: 1;
-    transition: background-color 0.12s, color 0.12s;
+    transition:
+      background-color 300ms var(--curve),
+      color 300ms var(--curve);
   }
 
   .item:hover {
-    background: var(--ink-900);
+    background: var(--bg-3);
     color: var(--ink-100);
   }
 
-  .compact {
-    min-height: 32px;
-    margin-left: 8px;
-    padding: 0 12px;
-    font-size: 13px;
+  .btn[aria-current="page"] {
+    background: var(--bg-3);
+    color: var(--ink-100);
   }
 
-  @media (max-width: 640px) {
-    .hide-narrow {
+  .toggle {
+    position: relative;
+    z-index: 2;
+    width: var(--s-500);
+    height: var(--s-500);
+    margin: calc(-1 * var(--s-25)) 0;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-100);
+    cursor: pointer;
+    transition: background-color 300ms var(--curve);
+  }
+
+  .toggle:hover {
+    background: var(--bg-3);
+  }
+
+  .toggle span {
+    position: absolute;
+    top: 19px;
+    left: var(--s-100);
+    width: var(--s-200);
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 500ms var(--curve);
+  }
+
+  .toggle span:first-child {
+    transform: translateY(-4px);
+  }
+
+  .toggle span:last-child {
+    transform: translateY(4px);
+  }
+
+  .toggle[aria-expanded="true"] span:first-child {
+    transform: rotate(45deg);
+  }
+
+  .toggle[aria-expanded="true"] span:last-child {
+    transform: rotate(-45deg);
+  }
+
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    padding: var(--s-900) var(--s-300) var(--s-400);
+    background: rgb(0 0 0 / 0.92);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 300ms var(--curve),
+      visibility 0s step-end 300ms;
+  }
+
+  .menu.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 300ms var(--curve);
+  }
+
+  .menu nav {
+    display: grid;
+    gap: var(--s-200);
+  }
+
+  .menu a {
+    width: fit-content;
+    opacity: 0;
+    transform: translateY(var(--s-300));
+    transition:
+      opacity 500ms var(--curve),
+      transform 500ms var(--curve);
+  }
+
+  /* 60ms a step, five links, so the sequence stays under the 400ms cap. */
+  .menu.open a {
+    opacity: 1;
+    transform: none;
+  }
+
+  .menu.open a:nth-child(2) { transition-delay: 60ms; }
+  .menu.open a:nth-child(3) { transition-delay: 120ms; }
+  .menu.open a:nth-child(4) { transition-delay: 180ms; }
+  .menu.open a:nth-child(5) { transition-delay: 240ms; }
+
+  @media (min-width: 768px) {
+    .links {
+      display: flex;
+    }
+
+    .toggle,
+    .menu {
       display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu a {
+      transform: none;
+    }
+
+    .toggle span {
+      transition-duration: 200ms;
     }
   }
 </style>

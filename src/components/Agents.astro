@@ -1,28 +1,39 @@
 ---
-const agents = ["Claude Code", "Codex", "OpenCode", "Pi", "Grok Build"];
+import AgentLogos from "./AgentLogos.astro";
+
+const points = [
+  ["Edits appear as they're written", "Agents write through the running app, into the same editor and save queue you use."],
+  ["Stale rewrites are rejected", "A full rewrite must quote the note's revision. If the note has changed since, it fails."],
+  ["No permission bypass", "Each CLI keeps its own permission settings. Logia doesn't add flags to skip them."],
+];
 ---
 
 <section id="agents" class="section">
-  <div class="wrap grid">
+  <div class="wrap grid reveal">
     <div>
-      <h2 class="heading">Your agent, inside your notes.</h2>
-      <p class="lede">
-        Open a CLI you already use in the side panel, on the login you already have. Logia doesn't touch your credentials.
-        The note you have open goes along with each message, unsaved edits included, and you can leave it out.
+      <h2 class="heading-4 md:heading-2">Run your coding agent in the side panel</h2>
+      <p class="body-3 muted lede">
+        Use a CLI you already have, on the login you already have. Logia doesn't touch your credentials. The open note is sent
+        with each message, unsaved edits included, and you can leave it out.
       </p>
 
-      <ul class="agents">{agents.map((name) => <li>{name}</li>)}</ul>
+      <AgentLogos class="agent-logos" />
 
       <ul class="points">
-        <li><b>Edits land live.</b> Agents write through the running app, into the same editor and save queue you use.</li>
-        <li><b>Your typing wins.</b> A full rewrite must quote the note's revision. If the note changed, it's rejected.</li>
-        <li><b>Permissions stay yours.</b> Each CLI keeps its own settings, and Logia adds no bypass flags.</li>
+        {
+          points.map(([name, detail]) => (
+            <li>
+              <h3 class="title-3">{name}</h3>
+              <p class="body-6 muted">{detail}</p>
+            </li>
+          ))
+        }
       </ul>
     </div>
 
     <div class="term" role="img" aria-label="Terminal example: an agent searches, appends to a note, and has a stale rewrite rejected">
-      <div class="term-head"><span>logia-cli</span><span>talks to the running app</span></div>
-      <pre><code><span class="c"># see the note, unsaved edits included</span>
+      <div class="term-head caption-5 quiet mono"><span>logia-cli</span><span>talks to the running app</span></div>
+      <pre class="body-6"><code><span class="c"># see the note, unsaved edits included</span>
 <span class="p">$</span> logia-cli read
 
 <span class="c"># find something across your notes</span>
@@ -33,85 +44,63 @@ const agents = ["Claude Code", "Codex", "OpenCode", "Pi", "Grok Build"];
 
 <span class="c"># replace it, but only if nothing has changed</span>
 <span class="p">$</span> logia-cli write id=NOTE_ID ifRevision=REVISION --stdin
-&#123; "error": &#123; "code": "<span class="e">REVISION_CONFLICT</span>",
-             "message": "Note changed. Read it again before editing." &#125; &#125;</code></pre>
+&#123; "error": &#123;
+    "code": "<span class="e">REVISION_CONFLICT</span>",
+    "message": "Note changed. Read it again before editing."
+&#125; &#125;</code></pre>
     </div>
   </div>
 </section>
 
 <style>
-  .section {
-    padding-block: clamp(64px, 10vw, 120px);
-    border-top: 1px solid var(--ink-800);
-    background: var(--ink-950);
-  }
-
   .grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
-    gap: clamp(32px, 5vw, 72px);
+    gap: var(--s-500);
     align-items: center;
   }
 
   .lede {
-    margin-top: 14px;
+    margin-top: var(--s-200);
+    max-width: 680px;
   }
 
-  .agents {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 24px;
-  }
-
-  .agents li {
-    padding: 4px 10px;
-    border: 1px solid var(--ink-800);
-    border-radius: 6px;
-    background: var(--ink-900);
-    color: var(--ink-200);
-    font-size: 13px;
-    font-weight: 500;
+  .grid :global(.agent-logos) {
+    margin-top: var(--s-300);
   }
 
   .points {
     display: grid;
-    gap: 12px;
-    margin-top: 28px;
-    color: var(--ink-400);
-    font-size: 15px;
+    gap: var(--s-200);
+    margin-top: var(--s-400);
   }
 
-  .points b {
-    color: var(--ink-100);
-    font-weight: 600;
+  .points p {
+    margin-top: var(--s-25);
   }
 
+  /* 16px shell with an 8px inset code panel inside (B3). */
   .term {
     min-width: 0;
-    overflow: hidden;
-    border: 1px solid var(--ink-800);
-    border-radius: 12px;
-    background: var(--ink-925);
+    padding: var(--s-75);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--bg-1);
   }
 
   .term-head {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--ink-800);
-    color: var(--ink-500);
-    font: 400 12px/1.3 var(--mono);
+    gap: var(--s-100);
+    padding: var(--s-75) var(--s-100) var(--s-100);
   }
 
   pre {
     margin: 0;
-    padding: 18px 16px;
+    padding: var(--s-200);
     overflow-x: auto;
+    border-radius: 8px;
+    background: var(--bg-0);
     color: var(--ink-100);
-    font-size: 13px;
-    line-height: 1.7;
   }
 
   .c {
@@ -127,9 +116,10 @@ const agents = ["Claude Code", "Codex", "OpenCode", "Pi", "Grok Build"];
     font-weight: 600;
   }
 
-  @media (max-width: 920px) {
+  @media (min-width: 1000px) {
     .grid {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: var(--s-700);
     }
   }
 </style>

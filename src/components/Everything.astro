@@ -15,34 +15,34 @@ const features = [
 
 <section id="everything" class="section">
   <div class="wrap">
-    <h2 class="heading">And the rest of a notebook.</h2>
-    <div class="clip">
+    <h2 class="heading-4 md:heading-2 reveal">What else it does</h2>
+    <div class="clip reveal">
       <Demo
         name="tour"
-        alt="A tour of Logia: filtering notes by tag, searching for starred notes, opening a note with its outline, tags, links and backlinks, following a backlink, opening today's note, drawing labelled shapes and arrows on a canvas, then adding a task to the board, moving it to Doing and completing it."
+        alt="A tour of Logia: filtering notes by tag, searching for starred notes, opening a note with its outline, tags, links and backlinks, following a backlink, opening today's note, drawing shapes and arrows on a canvas, and opening the task board."
       />
     </div>
-    <ul class="list">
+    <ul class="list reveal">
       {
         features.map(([name, detail]) => (
-          <li>
-            <h3>{name}</h3>
-            <p>{detail}</p>
+          <li class="card">
+            <h3 class="title-3">{name}</h3>
+            <p class="body-6 muted">{detail}</p>
           </li>
         ))
       }
     </ul>
 
-    <div class="yours">
+    <div class="yours card reveal">
       <div>
-        <h2 class="heading small">No account. No cloud of ours.</h2>
-        <p class="lede">
+        <h2 class="heading-5 md:heading-3">Where your data lives</h2>
+        <p class="body-3 muted lede">
           Notes live in <code>~/Documents/Logia</code> as JSON files. Sync is Git, to a private remote you choose, on your own
           SSH keys. API keys go in your OS keychain, and deleted notes wait 14 days in the trash.
         </p>
       </div>
-      <p class="early">
-        <b>Logia is early.</b> It started as a personal tool, so expect rough edges. There's no Mac on the desk here to test
+      <p class="early body-6 muted">
+        <b>It's still early.</b> Logia started as a personal tool, so expect rough edges. There's no Mac on the desk here to test
         with, so macOS gets the least attention.
       </p>
     </div>
@@ -50,73 +50,41 @@ const features = [
 </section>
 
 <style>
-  .section {
-    padding-block: clamp(64px, 10vw, 120px);
-    border-top: 1px solid var(--ink-800);
-    background: var(--ink-925);
-  }
-
   .clip {
-    margin-top: clamp(32px, 5vw, 48px);
+    margin-top: var(--s-400);
   }
 
   .list {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 32px 28px;
-    margin-top: clamp(32px, 5vw, 48px);
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--s-200);
+    margin-top: var(--s-200);
   }
 
   li {
-    padding-top: 14px;
-    border-top: 1px solid var(--ink-800);
-  }
-
-  h3 {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.35;
+    padding: var(--s-300);
   }
 
   li p {
-    margin-top: 6px;
-    color: var(--ink-400);
-    font-size: 14px;
-    line-height: 1.5;
-    text-wrap: pretty;
+    margin-top: var(--s-75);
   }
 
   .yours {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-    gap: clamp(24px, 4vw, 56px);
-    align-items: end;
-    margin-top: clamp(56px, 8vw, 96px);
-    padding: clamp(20px, 3.5vw, 40px);
-    border: 1px solid var(--ink-800);
-    border-radius: 12px;
-    background: var(--ink-950);
-  }
-
-  .small {
-    font-size: clamp(1.5rem, 2.8vw, 2.125rem);
+    gap: var(--s-300);
+    margin-top: var(--s-200);
+    padding: var(--s-300);
+    background: var(--bg-warm);
   }
 
   .lede {
-    margin-top: 12px;
+    margin-top: var(--s-100);
+    max-width: 680px;
   }
 
   code {
     color: var(--ink-100);
-    font-size: 0.9em;
     overflow-wrap: anywhere;
-  }
-
-  .early {
-    color: var(--ink-400);
-    font-size: 14px;
-    line-height: 1.55;
-    text-wrap: pretty;
   }
 
   .early b {
@@ -124,20 +92,12 @@ const features = [
     font-weight: 600;
   }
 
-  @media (max-width: 920px) {
-    .list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
+  @media (min-width: 1000px) {
     .yours {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .list {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 20px;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: var(--s-700);
+      align-items: end;
+      padding: var(--s-500);
     }
   }
 </style>

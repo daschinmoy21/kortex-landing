@@ -1,0 +1,101 @@
+---
+import Icon from "./Icon.astro";
+import { faq } from "../data/faq";
+---
+
+<section id="faq" class="section">
+  <div class="wrap layout">
+    <h2 class="heading-4 md:heading-2 reveal">FAQ</h2>
+    <div class="list reveal">
+      {
+        faq.map(([question, answer]) => (
+          <details class="card">
+            <summary class="title-3">
+              {question}
+              <span class="mark"><Icon name="plus" /></span>
+            </summary>
+            <p class="body-6 muted">{answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout {
+    display: grid;
+    gap: var(--s-400);
+  }
+
+  .list {
+    display: grid;
+    gap: var(--s-75);
+    min-width: 0;
+  }
+
+  details {
+    border-radius: 12px;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-200);
+    padding: var(--s-200);
+    border-radius: 12px;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 300ms var(--curve);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover {
+    background: var(--bg-2);
+  }
+
+  .mark {
+    display: inline-flex;
+    color: var(--ink-400);
+    transition: transform 500ms var(--curve);
+  }
+
+  details[open] .mark {
+    transform: rotate(45deg);
+  }
+
+  details p {
+    padding: 0 var(--s-500) var(--s-200) var(--s-200);
+  }
+
+  details[open] p {
+    animation: rise 500ms var(--curve);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(var(--s-75));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: var(--s-700);
+      align-items: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes rise {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+</style>

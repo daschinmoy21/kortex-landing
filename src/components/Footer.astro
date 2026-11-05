@@ -3,9 +3,9 @@ import { links } from "../data/release";
 ---
 
 <footer class="footer">
-  <div class="wrap row">
-    <span class="mark">Logia</span>
-    <span class="note">Free and open source, under AGPL-3.0.</span>
+  <div class="wrap row caption-2 quiet">
+    <a href="/" class="mark title-4">Logia</a>
+    <span>Free and open source, under AGPL 3.0.</span>
     <nav aria-label="Footer">
       <a href="/downloads">Download</a>
       <a href={links.repo} target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -15,46 +15,39 @@ import { links } from "../data/release";
 </footer>
 
 <style>
-  .footer {
-    border-top: 1px solid var(--ink-800);
-    background: var(--ink-925);
-  }
-
   .row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 16px;
-    padding-block: 20px;
-    color: var(--ink-500);
-    font-size: 13px;
+    gap: var(--s-75) var(--s-200);
+    padding-block: var(--s-300);
   }
 
   .mark {
     color: var(--ink-100);
-    font: 700 13px/1 var(--mono);
   }
 
   nav {
     display: flex;
-    gap: 16px;
+    gap: var(--s-200);
     margin-left: auto;
   }
 
-  a {
+  nav a {
     display: inline-block;
-    padding-block: 4px;
+    padding-block: var(--s-50);
     color: var(--ink-400);
+    transition: color 300ms var(--curve);
   }
 
-  a:hover {
+  nav a:hover {
     color: var(--ink-100);
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 559px) {
     nav {
-      margin-left: 0;
       width: 100%;
+      margin-left: 0;
     }
   }
 </style>

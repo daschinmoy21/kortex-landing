@@ -1,16 +1,20 @@
 ---
-import "@fontsource-variable/inter";
-import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
 import "../styles/global.css";
+import AsciiBackground from "../components/AsciiBackground.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  /** The home page's sharp background behind the hero. Every other page starts with it settled. */
+  sharpHero?: boolean;
 }
 
 const {
-  title = "Logia: a keyboard-first notes app that lets your agents in",
-  description = "Free, open-source desktop notes and canvases. Keep your notes on your machine, drive everything from the keyboard, and let your coding agents work on notes live.",
+  sharpHero = false,
+  title = "Logia: a local notes app your agent can edit",
+  description = "A free, open source desktop app for notes and canvases. Notes are files on your disk, Vim mode is optional, and Claude Code, Codex and other CLIs can edit the note you have open.",
 } = Astro.props;
 ---
 
@@ -19,7 +23,7 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0a0908" />
+    <meta name="theme-color" content="#000000" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -37,11 +41,30 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://getlogia.online/og.png" />
+
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    <slot name="head" />
   </head>
   <body>
+    <AsciiBackground settled={!sharpHero} />
+    <a class="skip" href="#content">Skip to content</a>
     <slot name="header" />
-    <main>
+    <main id="content">
       <slot />
     </main>
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add("in");
+            observer.unobserve(entry.target);
+          }
+        },
+        { rootMargin: "0px 0px -8% 0px" },
+      );
+      document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    </script>
   </body>
 </html>

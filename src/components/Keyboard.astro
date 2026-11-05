@@ -2,6 +2,7 @@
 import Demo from "./Demo.astro";
 
 // Every binding here comes from the app's README. Keep them in step with it.
+// Keys are space separated, one cap each. A "/" after the first key reads as "or".
 const groups = [
   {
     name: "Anywhere",
@@ -18,151 +19,165 @@ const groups = [
       ["Space e", "File explorer"],
       ["Space f", "Find note"],
       ["Space a", "AI panel"],
-      ["Space t", "To-do board"],
+      ["Space t", "To do board"],
     ],
   },
   {
     name: "In a note",
     rows: [
-      ["ciw", "Change a word"],
-      ['di"', "Delete inside quotes"],
+      ["c i w", "Change a word"],
+      ['d i "', "Delete inside quotes"],
       ["/ n N", "Search and jump"],
-      ["gg G", "Top and bottom"],
+      ["g g G", "Top and bottom"],
     ],
   },
-  {
-    name: "Command line",
-    rows: [
-      [":e <note>", "Open a note"],
-      [":canvas", "New canvas"],
-      [":ai <prompt>", "Ask the agent"],
-      [":wq", "Save and close"],
-    ],
-  },
+];
+
+// Typed as a whole, so these read as commands rather than caps.
+const commands = [
+  [":e <note>", "Open a note"],
+  [":canvas", "New canvas"],
+  [":ai <prompt>", "Ask the agent"],
+  [":wq", "Save and close"],
 ];
 ---
 
 <section id="keyboard" class="section">
   <div class="wrap">
-    <h2 class="heading">Put the mouse down.</h2>
-    <p class="lede">
-      Panes, tabs, the file tree and the agent all answer to the keyboard. Vim mode is optional, and covers motions,
-      operators, text objects, registers and a <code>:</code> command line.
-    </p>
+    <div class="reveal">
+      <h2 class="heading-4 md:heading-2">Use it without a mouse</h2>
+      <p class="body-3 muted lede">
+        Panes, tabs, the file tree and the agent panel all work from the keyboard. Vim mode is optional, and covers motions,
+        operators, text objects, registers and a <code>:</code> command line.
+      </p>
+      <p class="caption-2 quiet try">
+        Two of them work on this page: <kbd class="key">g</kbd> <kbd class="key">g</kbd> goes to the top and <kbd class="key">G</kbd> to the bottom.
+      </p>
+    </div>
 
-    <div class="clip">
+    <div class="clip reveal">
       <Demo
         name="keyboard"
         alt="Using only the keyboard in Logia: finding a note with Ctrl P, changing a word with Vim's ciw, then moving through the file explorer. Each key pressed appears on screen."
       />
     </div>
 
-    <div class="sheet">
+    <div class="sheet reveal">
       {
         groups.map((group) => (
-          <div class="group">
-            <h3>{group.name}</h3>
+          <div class="group card">
+            <h3 class="title-4">{group.name}</h3>
             <dl>
               {group.rows.map(([keys, action]) => (
                 <div class="row">
-                  <dt>{keys}</dt>
-                  <dd>{action}</dd>
+                  <dt>
+                    {keys.split(" ").map((key, index) =>
+                      key === "/" && index > 0 ? <span class="caption-5 quiet">or</span> : <kbd class="key">{key}</kbd>,
+                    )}
+                  </dt>
+                  <dd class="body-6 muted">{action}</dd>
                 </div>
               ))}
             </dl>
           </div>
         ))
       }
+      <div class="group card">
+        <h3 class="title-4">Command line</h3>
+        <dl>
+          {
+            commands.map(([command, action]) => (
+              <div class="row">
+                <dt class="command body-5 mono">{command}</dt>
+                <dd class="body-6 muted">{action}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
     </div>
   </div>
 </section>
 
-<style>
-  .section {
-    padding-block: clamp(64px, 10vw, 120px);
-    border-top: 1px solid var(--ink-800);
-    background: var(--ink-925);
-  }
+<script>
+  // The same gg and G the sheet lists. Left alone while typing or with a modifier held.
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let lastG = 0;
 
+  document.addEventListener("keydown", (event) => {
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+    if ((event.target as HTMLElement).closest("input, textarea, select, [contenteditable]")) return;
+
+    const behavior: ScrollBehavior = calm ? "auto" : "smooth";
+    if (event.key === "G") {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior });
+    } else if (event.key === "g") {
+      if (event.timeStamp - lastG < 500) {
+        window.scrollTo({ top: 0, behavior });
+        lastG = 0;
+      } else {
+        lastG = event.timeStamp;
+      }
+    }
+  });
+</script>
+
+<style>
   .lede {
-    margin-top: 14px;
+    margin-top: var(--s-200);
+    max-width: 680px;
   }
 
   .lede code {
     color: var(--ink-100);
-    font-size: 0.92em;
+  }
+
+  /* Touch screens have no keys to press. */
+  .try {
+    display: none;
+    margin-top: var(--s-200);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .try {
+      display: block;
+    }
   }
 
   .clip {
-    margin-top: clamp(32px, 5vw, 56px);
+    margin-top: var(--s-400);
   }
 
   .sheet {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-top: 24px;
-    border: 1px solid var(--ink-800);
-    border-radius: 12px;
-    background: var(--ink-950);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--s-200);
+    margin-top: var(--s-200);
   }
 
   .group {
-    padding: 20px;
-  }
-
-  .group + .group {
-    border-left: 1px solid var(--ink-800);
-  }
-
-  h3 {
-    margin-bottom: 14px;
-    color: var(--ink-500);
-    font: 400 12px/1.3 var(--mono);
+    padding: var(--s-300);
   }
 
   dl {
-    margin: 0;
-  }
-
-  .row {
-    padding-block: 9px;
-    border-top: 1px solid rgb(46 43 38 / 0.6);
+    display: grid;
+    gap: var(--s-200);
+    margin-top: var(--s-200);
   }
 
   dt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-50);
+    min-height: var(--s-300);
+  }
+
+  .command {
     color: var(--ember-300);
-    font: 500 13.5px/1.4 var(--mono);
   }
 
   dd {
-    margin: 2px 0 0;
-    color: var(--ink-400);
-    font-size: 13.5px;
-    line-height: 1.4;
-  }
-
-  @media (max-width: 920px) {
-    .sheet {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .group:nth-child(3) {
-      border-left: 0;
-    }
-
-    .group:nth-child(n + 3) {
-      border-top: 1px solid var(--ink-800);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .sheet {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .group + .group {
-      border-left: 0;
-      border-top: 1px solid var(--ink-800);
-    }
+    margin-top: var(--s-50);
   }
 </style>

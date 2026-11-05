@@ -16,18 +16,27 @@ const { name, alt, eager = false } = Astro.props;
 </figure>
 
 <style>
+  /* 16px shell, 8px inset, 8px image radius (B3). */
   .demo {
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid var(--ink-800);
-    border-radius: 12px;
-    background: var(--ink-950);
-    box-shadow: 0 40px 100px rgb(0 0 0 / 0.55);
+    padding: var(--s-75);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--bg-1);
   }
 
   img {
     display: block;
     width: 100%;
     height: auto;
+    border-radius: 8px;
+    background: var(--bg-2);
+  }
+
+  /* On a phone the frame eats width the recording needs. */
+  @media (max-width: 767px) {
+    .demo {
+      padding: var(--s-50);
+      border-radius: 12px;
+    }
   }
 </style>

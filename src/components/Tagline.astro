@@ -1,0 +1,83 @@
+---
+// B11: the page's one large type moment. Each line breaks where the thought breaks.
+const lines = ["There's no account.", "Your notes are files", "on your disk."];
+---
+
+<section class="tagline" data-tagline>
+  <div class="wrap">
+    <p class="words heading-3 md:heading-1">
+      {
+        lines.map((line) => (
+          <span class="line">
+            {line.split(" ").map((word) => (
+              <>
+                <span class="word">{word}</span>{" "}
+              </>
+            ))}
+          </span>
+        ))
+      }
+    </p>
+  </div>
+</section>
+
+<script>
+  const block = document.querySelector<HTMLElement>("[data-tagline] .words");
+  const words = block ? [...block.querySelectorAll<HTMLElement>(".word")] : [];
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (block && words.length && !calm) {
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      const box = block.getBoundingClientRect();
+      const height = window.innerHeight;
+      // Starts as the block's top reaches 80% of the viewport, ends as its bottom reaches 55%.
+      const start = height * 0.8;
+      const end = height * 0.55 - box.height;
+      const progress = Math.min(1, Math.max(0, (start - box.top) / (start - end)));
+      const lit = Math.round(progress * words.length);
+      for (let index = 0; index < lit; index++) words[index].classList.add("lit");
+      if (lit === words.length) window.removeEventListener("scroll", request);
+    };
+
+    const request = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+
+    window.addEventListener("scroll", request, { passive: true });
+    update();
+  } else {
+    words.forEach((word) => word.classList.add("lit"));
+  }
+</script>
+
+<style>
+  .tagline {
+    padding-block: var(--s-900);
+  }
+
+  .words {
+    max-width: 680px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  :global(.js) .word {
+    opacity: 0.3;
+    transition: opacity 500ms var(--curve);
+  }
+
+  :global(.js) .word.lit {
+    opacity: 1;
+  }
+
+  @media (min-width: 768px) {
+    .tagline {
+      padding-block: calc(2 * var(--s-900));
+    }
+  }
+</style>

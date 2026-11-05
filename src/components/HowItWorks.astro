@@ -1,0 +1,47 @@
+---
+const steps = [
+  ["Install Logia", "Pick an installer for Linux, Windows or macOS, or run it with Nix. There is no account to create."],
+  ["Open your agent in the side panel", "Claude Code, Codex, OpenCode, Pi or Grok Build, on the login you already have."],
+  ["Ask it to change a note", "The open note is sent with your message, and edits appear in the editor as the agent writes them."],
+];
+---
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="heading-4 md:heading-2 reveal">Getting started</h2>
+    <ol class="steps reveal">
+      {
+        steps.map(([name, detail], index) => (
+          <li class="card">
+            <span class="caption-4 mono number">{index + 1}</span>
+            <h3 class="title-2">{name}</h3>
+            <p class="body-6 muted">{detail}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--s-200);
+    margin-top: var(--s-400);
+  }
+
+  li {
+    padding: var(--s-300);
+  }
+
+  .number {
+    display: block;
+    margin-bottom: var(--s-300);
+    color: var(--ember-300);
+  }
+
+  p {
+    margin-top: var(--s-75);
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+import CopyCommand from "./CopyCommand.astro";
+import Icon from "./Icon.astro";
+import { nixReleaseCommand } from "../data/release";
+---
+
+<section class="final">
+  <div class="wrap inner reveal">
+    <h2 class="heading-3 md:heading-2">Try Logia</h2>
+    <p class="body-3 muted">Free and open source, for Linux, Windows and macOS.</p>
+    <a href="/downloads" class="btn btn-primary"><Icon name="download" /> Download Logia</a>
+    <div class="well nix">
+      <CopyCommand command={nixReleaseCommand} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .final {
+    padding-block: var(--s-800);
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-200);
+    text-align: center;
+  }
+
+  .nix {
+    width: 100%;
+    max-width: 560px;
+    margin-top: var(--s-200);
+    text-align: left;
+  }
+
+  @media (min-width: 768px) {
+    .final {
+      padding-block: calc(var(--s-900) + var(--s-400));
+    }
+  }
+</style>
