@@ -2,441 +2,223 @@
 import Layout from "../layouts/Layout.astro";
 import HeroHeader from "../components/HeroHeader.astro";
 import Footer from "../components/Footer.astro";
+import CopyCommand from "../components/CopyCommand.astro";
+import { installers, links, nixMainCommand, release } from "../data/release";
+
+const platforms = [
+  {
+    name: "Windows",
+    note: "x64",
+    rows: installers.windows.map((item) => ({ ...item, external: true })),
+  },
+  {
+    name: "Linux",
+    note: "x64",
+    rows: installers.linux.map((item) => ({ ...item, external: true })),
+  },
+  {
+    name: "macOS",
+    note: "Apple Silicon, unsigned",
+    rows: [{ label: "Disk image (.dmg)", size: "8 MB", href: "/mac-instructions", external: false }],
+  },
+];
 ---
 
-<Layout>
-    <HeroHeader slot="header" />
+<Layout title="Download Logia" description="Download Logia for Linux, Windows and macOS, or run the latest build with Nix.">
+  <HeroHeader slot="header" />
 
-    <div class="downloads-container">
-        <div class="text-center">
-            <h1 class="title">Download Logia</h1>
-            <p class="subtitle">Available for macOS, Windows, and Linux</p>
-        </div>
+  <div class="wrap page">
+    <h1 class="heading">Download Logia</h1>
 
-        <!-- Recommended Download -->
-        <!-- <div class="recommended-card"> -->
-        <!--     <div class="recommended-info"> -->
-        <!--         <span class="recommended-label" -->
-        <!--             >Recommended for your system</span -->
-        <!--         > -->
-        <!--         <h2 class="platform-name">Linux (AppImage)</h2> -->
-        <!--     </div> -->
-        <!--     <a href="#" class="download-button primary"> -->
-        <!--         <svg -->
-        <!--             xmlns="http://www.w3.org/2000/svg" -->
-        <!--             viewBox="0 0 24 24" -->
-        <!--             fill="currentColor" -->
-        <!--             class="icon" -->
-        <!--         > -->
-        <!--             <path -->
-        <!--                 fill-rule="evenodd" -->
-        <!--                 d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z" -->
-        <!--                 clip-rule="evenodd"></path> -->
-        <!--         </svg> -->
-        <!--         Download for Linux -->
-        <!--     </a> -->
-        <!-- </div> -->
+    <section class="latest" id="main">
+      <div>
+        <h2>Latest from main, with Nix</h2>
+        <p>
+          Pulls the main branch and builds it from source. You get the newest work first, including what hasn't reached a
+          release yet, and it's the least tested way to run Logia.
+        </p>
+      </div>
+      <div class="well"><CopyCommand command={nixMainCommand} /></div>
+    </section>
 
-        <!-- All Platforms Grid -->
-        <div class="platforms-grid">
-            <!-- macOS -->
-            <div class="platform-card">
-                <div class="card-header">
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="platform-icon"
-                    >
-                        <path
-                            d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-1.26 3.15-3.37 4.79-3.37 4.79zM13 3.5c.52-.63.86-1.51.76-2.37-.81.03-1.8.54-2.39 1.23-.51.6-.9 1.54-.79 2.37.91.07 1.9-.52 2.42-1.23z"
-                        ></path>
-                    </svg>
-                    <h3>macOS</h3>
-                </div>
-                <div class="download-options">
-                    <div class="download-row">
-                        <span>Apple Silicon</span>
-                        <div class="download-meta">
-                            <a
-                                href="/mac-instructions"
-                                class="download-link"
-                                aria-label="Download for Apple Silicon"
-                            >
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    class="download-icon"
-                                >
-                                    <path
-                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    ></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="mac-info">
-                    <p class="req-text">Requires macOS 11+</p>
-                </div>
+    <section class="installers">
+      <div class="head">
+        <h2>Installers</h2>
+        <span>v{release.version} · {release.date}</span>
+      </div>
+
+      {
+        !release.current && (
+          <p class="notice">
+            <b>These are an older build.</b> They have the previous interface, and no Vim mode or agent panel yet. New
+            installers are on the way.
+          </p>
+        )
+      }
+
+      <div class="platforms">
+        {
+          platforms.map((platform) => (
+            <div class="platform">
+              <h3>
+                {platform.name} <span>{platform.note}</span>
+              </h3>
+              <ul>
+                {platform.rows.map((row) => (
+                  <li>
+                    <a href={row.href} {...(row.external ? { rel: "noopener noreferrer" } : {})}>
+                      <span>{row.label}</span>
+                      <span class="size">{row.size}</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
+          ))
+        }
+      </div>
+    </section>
 
-            <!-- Windows -->
-            <div class="platform-card">
-                <div class="card-header">
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="platform-icon"
-                    >
-                        <path
-                            d="M0 3.449L9.75 2.1v9.451l-9.75.043V3.449zm10.949-1.223L24 0v11.458l-13.051.13V2.226zm-10.949 9.967l9.744.045v9.806l-9.744-1.31V12.193zm10.949.122l13.051.125V24l-13.051-1.78v-10.15z"
-                        ></path>
-                    </svg>
-                    <h3>Windows</h3>
-                </div>
-                <div class="download-options">
-                    <div class="download-row">
-                        <span>x64 Setup.exe</span>
-                        <div class="download-meta">
-                            <a
-                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.5/logia_0.9.5_x64-setup.exe"
-                                class="download-link"
-                                aria-label="Download for Windows"
-                            >
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    class="download-icon"
-                                >
-                                    <path
-                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    ></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="download-row">
-                        <span>x64 MSI (.msi)</span>
-                        <div class="download-meta">
-                            <a
-                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.5/logia_0.9.5_x64-setup.exe"
-                                class="download-link"
-                                aria-label="Download Windows MSI"
-                            >
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    class="download-icon"
-                                >
-                                    <path
-                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    ></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <p class="more">
+      Audio transcription also needs Python 3.12+ and FFmpeg. Every release is on
+      <a class="link" href={links.releases} target="_blank" rel="noopener noreferrer">GitHub</a>.
+    </p>
+  </div>
 
-            <!-- Linux -->
-            <div class="platform-card">
-                <div class="card-header">
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        class="platform-icon"
-                    >
-                        <path
-                            d="M11.969 1.484L1.59 20.354l1.233 2.131L11.97 6.084l9.146 16.4 1.23-2.13L11.97 1.484zm-1.42 8.283h2.84l3.905 7.156h-2.18L12 10.666l-3.111 6.257h-2.18l3.903-7.156z"
-                        ></path>
-                    </svg>
-                    <h3>Linux</h3>
-                </div>
-                <div class="download-options">
-                    <div class="download-row">
-                        <span>AppImage</span>
-                        <div class="download-meta">
-                            <a
-                                href="https://github.com/daschinmoy21/Logia/releases/download/v0.9.5/logia_0.9.5_amd64.AppImage"
-                                class="download-link"
-                            >
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    class="download-icon"
-                                >
-                                    <path
-                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    ></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <Footer />
+  <Footer />
 </Layout>
 
 <style>
-    .downloads-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 5rem 2rem 2rem;
-        min-height: 60vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3rem;
-        font-family: "Iosevka", sans-serif;
+  .page {
+    max-width: calc(880px + 2 * var(--gutter));
+    min-height: calc(100dvh - 120px);
+    padding-block: clamp(48px, 8vw, 88px);
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .latest {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+    padding: 20px;
+    border: 1px solid var(--ink-800);
+    border-radius: 12px;
+    background: var(--ink-950);
+  }
+
+  .latest p {
+    margin-top: 6px;
+    max-width: 62ch;
+    color: var(--ink-400);
+    font-size: 15px;
+  }
+
+  .well {
+    padding: 6px;
+    border: 1px solid var(--ink-800);
+    border-radius: 12px;
+    background: var(--ink-900);
+  }
+
+  .installers {
+    margin-top: 48px;
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+  }
+
+  .head span {
+    color: var(--ink-500);
+    font: 400 12px/1.3 var(--mono);
+  }
+
+  .notice {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border: 1px solid rgb(244 122 53 / 0.3);
+    border-radius: 8px;
+    background: rgb(244 122 53 / 0.06);
+    color: var(--ink-300);
+    font-size: 14px;
+  }
+
+  .notice b {
+    color: var(--ember-300);
+    font-weight: 600;
+  }
+
+  .platforms {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  h3 span {
+    display: block;
+    color: var(--ink-500);
+    font: 400 12px/1.5 var(--mono);
+  }
+
+  ul {
+    margin-top: 10px;
+  }
+
+  li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    border-top: 1px solid var(--ink-800);
+    color: var(--ink-200);
+    font-size: 14px;
+    transition: color 0.12s;
+  }
+
+  li a:hover {
+    color: var(--ember-300);
+  }
+
+  .size {
+    margin-left: auto;
+    color: var(--ink-500);
+    font: 400 12px/1 var(--mono);
+    white-space: nowrap;
+  }
+
+  svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+
+  .more {
+    margin-top: 32px;
+    color: var(--ink-400);
+    font-size: 14px;
+  }
+
+  @media (max-width: 720px) {
+    .platforms {
+      grid-template-columns: minmax(0, 1fr);
     }
-
-    :global(.footer) {
-        font-family: "Iosevka", sans-serif;
-    }
-
-    :global(.hero-header) {
-        font-family: "Iosevka", sans-serif;
-    }
-
-    .text-center {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .title {
-        font-size: 3.5rem;
-        font-weight: 700;
-        color: white;
-        margin-bottom: 0.5rem;
-        font-family: "Iosevka", sans-serif;
-    }
-
-    .subtitle {
-        font-size: 1.1rem;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    /* Recommended Card */
-    .recommended-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 1.5rem 2rem;
-        width: 100%;
-        max-width: 900px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        backdrop-filter: blur(12px);
-    }
-
-    .recommended-label {
-        display: block;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 0.25rem;
-    }
-
-    .platform-name {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: white;
-        margin: 0;
-    }
-
-    .download-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: #2563eb;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 6px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background 0.2s;
-    }
-
-    .download-button:hover {
-        background: #1d4ed8;
-    }
-
-    .download-button .icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    /* Grid */
-    .platforms-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        width: 100%;
-        max-width: 800px;
-    }
-
-    .platform-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 1rem;
-        backdrop-filter: blur(12px);
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    .card-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .platform-icon {
-        width: 24px;
-        height: 24px;
-        color: white;
-    }
-
-    .card-header h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: white;
-        margin: 0;
-    }
-
-    .download-options {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .download-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .download-meta {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .size {
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .download-link {
-        color: rgba(255, 255, 255, 0.6);
-        transition: color 0.2s;
-        display: flex;
-        align-items: center;
-    }
-
-    .download-link:hover {
-        color: white;
-    }
-
-    .download-icon {
-        width: 16px;
-        height: 16px;
-    }
-
-    .coming-soon {
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 0.9rem;
-    }
-
-    /* Mac Info */
-    .mac-info {
-        margin-bottom: 1rem;
-        font-size: 0.9rem;
-    }
-
-    .req-text {
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 0.75rem;
-    }
-
-    .warning-box {
-        background: rgba(245, 158, 11, 0.1);
-        border: 1px solid rgba(245, 158, 11, 0.2);
-        padding: 0.5rem;
-        border-radius: 6px;
-        margin-bottom: 0.75rem;
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 0.85rem;
-    }
-
-    .warning-box p {
-        margin: 0;
-    }
-
-    .command-box {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 0.5rem;
-        border-radius: 6px;
-    }
-
-    .cmd-label {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 0.25rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .command-box code {
-        display: block;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.75rem;
-        color: #ef4444;
-        word-break: break-all;
-        user-select: all;
-    }
-
-    .dev-note {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.4);
-        margin-top: 0.5rem;
-        font-style: italic;
-    }
-
-    @media (max-width: 768px) {
-        .platforms-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .recommended-card {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .download-button {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .title {
-            font-size: 2.5rem;
-        }
-    }
+  }
 </style>

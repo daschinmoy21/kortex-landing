@@ -1,0 +1,168 @@
+---
+import Demo from "./Demo.astro";
+
+// Every binding here comes from the app's README. Keep them in step with it.
+const groups = [
+  {
+    name: "Anywhere",
+    rows: [
+      ["Ctrl P", "Find a note"],
+      ["Ctrl Shift P", "Run a command"],
+      ["Ctrl H / L", "Move between panes"],
+      ["Ctrl \\", "Pin or hide the sidebar"],
+    ],
+  },
+  {
+    name: "Leader, with Vim on",
+    rows: [
+      ["Space e", "File explorer"],
+      ["Space f", "Find note"],
+      ["Space a", "AI panel"],
+      ["Space t", "To-do board"],
+    ],
+  },
+  {
+    name: "In a note",
+    rows: [
+      ["ciw", "Change a word"],
+      ['di"', "Delete inside quotes"],
+      ["/ n N", "Search and jump"],
+      ["gg G", "Top and bottom"],
+    ],
+  },
+  {
+    name: "Command line",
+    rows: [
+      [":e <note>", "Open a note"],
+      [":canvas", "New canvas"],
+      [":ai <prompt>", "Ask the agent"],
+      [":wq", "Save and close"],
+    ],
+  },
+];
+---
+
+<section id="keyboard" class="section">
+  <div class="wrap">
+    <h2 class="heading">Put the mouse down.</h2>
+    <p class="lede">
+      Panes, tabs, the file tree and the agent all answer to the keyboard. Vim mode is optional, and covers motions,
+      operators, text objects, registers and a <code>:</code> command line.
+    </p>
+
+    <div class="clip">
+      <Demo
+        name="keyboard"
+        alt="Using only the keyboard in Logia: finding a note with Ctrl P, changing a word with Vim's ciw, then moving through the file explorer. Each key pressed appears on screen."
+      />
+    </div>
+
+    <div class="sheet">
+      {
+        groups.map((group) => (
+          <div class="group">
+            <h3>{group.name}</h3>
+            <dl>
+              {group.rows.map(([keys, action]) => (
+                <div class="row">
+                  <dt>{keys}</dt>
+                  <dd>{action}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: clamp(64px, 10vw, 120px);
+    border-top: 1px solid var(--ink-800);
+    background: var(--ink-925);
+  }
+
+  .lede {
+    margin-top: 14px;
+  }
+
+  .lede code {
+    color: var(--ink-100);
+    font-size: 0.92em;
+  }
+
+  .clip {
+    margin-top: clamp(32px, 5vw, 56px);
+  }
+
+  .sheet {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 24px;
+    border: 1px solid var(--ink-800);
+    border-radius: 12px;
+    background: var(--ink-950);
+  }
+
+  .group {
+    padding: 20px;
+  }
+
+  .group + .group {
+    border-left: 1px solid var(--ink-800);
+  }
+
+  h3 {
+    margin-bottom: 14px;
+    color: var(--ink-500);
+    font: 400 12px/1.3 var(--mono);
+  }
+
+  dl {
+    margin: 0;
+  }
+
+  .row {
+    padding-block: 9px;
+    border-top: 1px solid rgb(46 43 38 / 0.6);
+  }
+
+  dt {
+    color: var(--ember-300);
+    font: 500 13.5px/1.4 var(--mono);
+  }
+
+  dd {
+    margin: 2px 0 0;
+    color: var(--ink-400);
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 920px) {
+    .sheet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .group:nth-child(3) {
+      border-left: 0;
+    }
+
+    .group:nth-child(n + 3) {
+      border-top: 1px solid var(--ink-800);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sheet {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .group + .group {
+      border-left: 0;
+      border-top: 1px solid var(--ink-800);
+    }
+  }
+</style>

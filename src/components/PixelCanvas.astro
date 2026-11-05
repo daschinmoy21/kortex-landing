@@ -1,0 +1,11 @@
+---
+const { class: className = "" } = Astro.props;
+---
+
+<canvas data-pixel-scene aria-hidden="true" class={className}></canvas>
+
+<script>
+  import { mountPixelScene } from "../scripts/pixel-scene";
+
+  document.querySelectorAll<HTMLCanvasElement>("canvas[data-pixel-scene]").forEach(mountPixelScene);
+</script>

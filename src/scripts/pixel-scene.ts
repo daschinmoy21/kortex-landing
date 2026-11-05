@@ -1,0 +1,214 @@
+// The dot-matrix scene from Logia's Home screen (src/components/workspace/PixelScene.tsx in the
+// app), without React. Same cell sizes, palette and sprites, so the two stay recognisably one thing.
+
+/** One matrix cell, in CSS pixels: a tall lit bar and the dark gap around it. */
+const CELL_WIDTH = 5;
+const CELL_HEIGHT = 9;
+const BAR_WIDTH = 3;
+const BAR_HEIGHT = 7;
+
+const FPS = 12;
+const LEVELS = 8;
+const SEED = 41.7;
+
+const rgb = (hex: string): [number, number, number] => [
+  parseInt(hex.slice(1, 3), 16),
+  parseInt(hex.slice(3, 5), 16),
+  parseInt(hex.slice(5, 7), 16),
+];
+
+const RAMP = ["#0f0c0a", "#1b1612", "#29211b"].map(rgb);
+const PANEL = "#050303";
+const SPRITE = { cream: LEVELS, orange: LEVELS + 1, stem: LEVELS + 2, blade: LEVELS + 3, petal: LEVELS + 4, bud: LEVELS + 5 };
+const SPRITE_COLORS = ["#f7ecc4", "#f47a35", "#7a2a0c", "#4a1a08", "#f6ae5c", "#fbe7a6"];
+
+const hash = (x: number, y: number) => {
+  const value = Math.sin(x * 127.1 + y * 311.7 + SEED) * 43758.5453;
+  return value - Math.floor(value);
+};
+
+const smooth = (t: number) => t * t * (3 - 2 * t);
+const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
+
+function noise(x: number, y: number) {
+  const ix = Math.floor(x);
+  const iy = Math.floor(y);
+  const fx = smooth(x - ix);
+  const fy = smooth(y - iy);
+  const top = hash(ix, iy) * (1 - fx) + hash(ix + 1, iy) * fx;
+  const bottom = hash(ix, iy + 1) * (1 - fx) + hash(ix + 1, iy + 1) * fx;
+  return top * (1 - fy) + bottom * fy;
+}
+
+function fbm(x: number, y: number) {
+  let total = 0;
+  let amplitude = 0.5;
+  for (let octave = 0; octave < 4; octave++) {
+    total += noise(x, y) * amplitude;
+    x = x * 2.03 + 7.1;
+    y = y * 2.03 + 3.3;
+    amplitude /= 2;
+  }
+  return total / 0.9375;
+}
+
+function color(value: number) {
+  const position = clamp01(value) * (RAMP.length - 1);
+  const index = Math.min(RAMP.length - 2, Math.floor(position));
+  const t = position - index;
+  const [a, b] = [RAMP[index], RAMP[index + 1]];
+  return `rgb(${a[0] + (b[0] - a[0]) * t} ${a[1] + (b[1] - a[1]) * t} ${a[2] + (b[2] - a[2]) * t})`;
+}
+
+const PALETTE = [...Array.from({ length: LEVELS }, (_, i) => color(i / (LEVELS - 1))), ...SPRITE_COLORS];
+
+function buildField(columns: number, rows: number, height: number) {
+  const field = new Float32Array(columns * rows);
+  for (let row = 0; row < rows; row++) {
+    for (let column = 0; column < columns; column++) {
+      const drift = fbm((column * CELL_WIDTH) / (height * 0.5), (row * CELL_HEIGHT) / (height * 0.12));
+      field[row * columns + column] = clamp01(drift * 1.1 - 0.1) * (0.85 + 0.3 * hash(column, row));
+    }
+  }
+  return field;
+}
+
+type Put = (column: number, row: number, sprite: number) => void;
+
+function drawBird(put: Put, column: number, row: number, seed: number, time: number) {
+  const span = 5 + Math.round(hash(seed, 5) * 2);
+  const flap = Math.sin(time * (6.5 + hash(seed, 6) * 2) + seed * 1.7);
+  const tone = hash(seed, 7) > 0.35 ? SPRITE.cream : SPRITE.orange;
+  put(column, row, tone);
+  put(column + 1, row, tone);
+  for (let k = 1; k <= span; k++) {
+    const along = k / span;
+    const lift = flap * 2.6 * along - Math.max(0, along - 0.55) * flap * 1.6;
+    put(column - k, row - lift, tone);
+    put(column + 1 + k, row - lift, tone);
+  }
+}
+
+function drawFlock(put: Put, columns: number, rows: number, index: number, time: number) {
+  const direction = index % 2 ? -1 : 1;
+  const birds = 3 + index * 2;
+  const span = columns + 120;
+  const travel = (time * (7 + index * 2.5) + hash(index, 3) * span) % span;
+  const lead = direction > 0 ? travel - 60 : columns + 60 - travel;
+  const lane = rows * (0.1 + index * 0.1) + 2;
+  for (let bird = 0; bird < birds; bird++) {
+    const rank = Math.ceil(bird / 2);
+    const side = bird % 2 ? -1 : 1;
+    const seed = index * 10 + bird;
+    const column = lead - direction * rank * 16 + (hash(seed, 8) - 0.5) * 4;
+    const row = lane + side * rank * 2.4 + 1.5 * Math.sin(time * 0.45 + column * 0.02 + seed);
+    drawBird(put, column, row, seed, time);
+  }
+}
+
+function drawPlant(put: Put, base: number, ground: number, seed: number, time: number) {
+  const flower = hash(seed, 1) > 0.5;
+  const height = flower ? 9 + hash(seed, 2) * 9 : 4 + hash(seed, 2) * 6;
+  const reach = 2.5 + hash(seed, 3) * 4;
+  const wind = (lean: number) =>
+    Math.sin(time * 1.25 - base * 0.09 + hash(seed, 4)) * lean + Math.sin(time * 0.37 - base * 0.03) * lean * 0.6;
+  let column = base;
+  let row = ground;
+  for (let step = 0; step <= height; step++) {
+    const along = step / height;
+    column = base + wind(reach * along * along);
+    row = ground - step;
+    put(column, row, flower ? SPRITE.stem : SPRITE.blade);
+  }
+  if (!flower) return;
+  for (const [dx, dy] of [[-2, 0], [2, 0], [-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+    put(column + dx, row + dy, SPRITE.petal);
+  }
+  put(column, row, SPRITE.bud);
+}
+
+function createPanel(canvas: HTMLCanvasElement, width: number, height: number) {
+  const context = canvas.getContext("2d");
+  if (!context || width < 1 || height < 1) return null;
+  const scale = window.devicePixelRatio || 1;
+  canvas.width = Math.round(width * scale);
+  canvas.height = Math.round(height * scale);
+  context.fillStyle = PANEL;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Bars are drawn on whole device pixels. At a fractional scale (125%, 150%) a bar's edge would
+  // otherwise be anti-aliased, and repainting a bird's cell in a darker colour leaves that soft
+  // edge behind, which reads as a trail.
+  const barWidth = Math.max(1, Math.round(BAR_WIDTH * scale));
+  const barHeight = Math.max(1, Math.round(BAR_HEIGHT * scale));
+
+  const columns = Math.ceil(width / CELL_WIDTH);
+  const rows = Math.ceil(height / CELL_HEIGHT);
+  const field = buildField(columns, rows, height);
+  const previous = new Int16Array(columns * rows).fill(-1);
+  const sprites = new Int16Array(columns * rows);
+
+  const flocks = columns < 120 ? 1 : 2;
+  const ground = Math.round(rows * 0.86);
+  // Plants frame the panel and stay clear of the words in the middle.
+  const plants: number[] = [];
+  for (let column = 1; column < columns; column += 2) {
+    const side = Math.min(column, columns - column) / columns;
+    if (side < 0.2 && hash(column, 11) > 0.35 + side * 2) plants.push(column);
+  }
+
+  return (time: number) => {
+    sprites.fill(-1);
+    const put: Put = (column, row, sprite) => {
+      const c = Math.round(column);
+      const r = Math.round(row);
+      if (c >= 0 && c < columns && r >= 0 && r < rows) sprites[r * columns + c] = sprite;
+    };
+    for (const plant of plants) drawPlant(put, plant, ground, plant, time);
+    for (let flock = 0; flock < flocks; flock++) drawFlock(put, columns, rows, flock, time);
+
+    for (let row = 0; row < rows; row++) {
+      for (let column = 0; column < columns; column++) {
+        const i = row * columns + column;
+        let index = sprites[i];
+        if (index < 0) index = Math.round(field[i] * (LEVELS - 1));
+        if (index === previous[i]) continue;
+        previous[i] = index;
+        context.fillStyle = PALETTE[index];
+        context.fillRect(Math.round(column * CELL_WIDTH * scale), Math.round(row * CELL_HEIGHT * scale), barWidth, barHeight);
+      }
+    }
+  };
+}
+
+/** Runs only while on screen and the tab is showing; holds a still frame for reduced motion. */
+export function mountPixelScene(canvas: HTMLCanvasElement) {
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let last = "";
+  let lastDraw = 0;
+  let onScreen = true;
+  let draw: ((time: number) => void) | null = null;
+
+  const tick = (now: number) => {
+    requestAnimationFrame(tick);
+    if (!draw || !onScreen || document.hidden || now - lastDraw < 1000 / FPS) return;
+    lastDraw = now;
+    draw(now / 1000);
+  };
+
+  new ResizeObserver(([entry]) => {
+    const { width, height } = entry.contentRect;
+    const size = `${width}x${height}`;
+    if (size === last) return;
+    last = size;
+    draw = createPanel(canvas, width, height);
+    // A fixed time for the still frame, so the birds are always in view.
+    draw?.(still ? 24 : performance.now() / 1000);
+  }).observe(canvas);
+
+  new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+  }).observe(canvas);
+
+  if (!still) requestAnimationFrame(tick);
+}

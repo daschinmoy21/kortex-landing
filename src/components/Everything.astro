@@ -1,0 +1,143 @@
+---
+import Demo from "./Demo.astro";
+
+const features = [
+  ["Block editor", "Slash commands, code blocks and tables, with an optional AI menu in the note."],
+  ["Infinite canvas", "tldraw built in, for sketches and diagrams next to your text."],
+  ["Links and backlinks", "Wikilinks, tags and a panel showing headings and what links here."],
+  ["Daily notes", "Ctrl Shift D opens today's note, kept in its own folder."],
+  ["Task boards", "Kanban boards for what's on your plate, without another app."],
+  ["Audio and transcripts", "Record, then transcribe. Needs Python and FFmpeg on your machine."],
+  ["Any AI provider", "Gemini, OpenAI, Anthropic, OpenRouter and more, or local models through Ollama and LM Studio."],
+  ["Markdown import", "Copy your .md files in. Attachments and folder layouts don't come along yet."],
+];
+---
+
+<section id="everything" class="section">
+  <div class="wrap">
+    <h2 class="heading">And the rest of a notebook.</h2>
+    <div class="clip">
+      <Demo
+        name="tour"
+        alt="A tour of Logia: filtering notes by tag, searching for starred notes, opening a note with its outline, tags, links and backlinks, following a backlink, opening today's note, drawing labelled shapes and arrows on a canvas, then adding a task to the board, moving it to Doing and completing it."
+      />
+    </div>
+    <ul class="list">
+      {
+        features.map(([name, detail]) => (
+          <li>
+            <h3>{name}</h3>
+            <p>{detail}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="yours">
+      <div>
+        <h2 class="heading small">No account. No cloud of ours.</h2>
+        <p class="lede">
+          Notes live in <code>~/Documents/Logia</code> as JSON files. Sync is Git, to a private remote you choose, on your own
+          SSH keys. API keys go in your OS keychain, and deleted notes wait 14 days in the trash.
+        </p>
+      </div>
+      <p class="early">
+        <b>Logia is early.</b> It started as a personal tool, so expect rough edges. There's no Mac on the desk here to test
+        with, so macOS gets the least attention.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: clamp(64px, 10vw, 120px);
+    border-top: 1px solid var(--ink-800);
+    background: var(--ink-925);
+  }
+
+  .clip {
+    margin-top: clamp(32px, 5vw, 48px);
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px 28px;
+    margin-top: clamp(32px, 5vw, 48px);
+  }
+
+  li {
+    padding-top: 14px;
+    border-top: 1px solid var(--ink-800);
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  li p {
+    margin-top: 6px;
+    color: var(--ink-400);
+    font-size: 14px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .yours {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: end;
+    margin-top: clamp(56px, 8vw, 96px);
+    padding: clamp(20px, 3.5vw, 40px);
+    border: 1px solid var(--ink-800);
+    border-radius: 12px;
+    background: var(--ink-950);
+  }
+
+  .small {
+    font-size: clamp(1.5rem, 2.8vw, 2.125rem);
+  }
+
+  .lede {
+    margin-top: 12px;
+  }
+
+  code {
+    color: var(--ink-100);
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+  }
+
+  .early {
+    color: var(--ink-400);
+    font-size: 14px;
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .early b {
+    color: var(--ember-300);
+    font-weight: 600;
+  }
+
+  @media (max-width: 920px) {
+    .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .yours {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .list {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+  }
+</style>

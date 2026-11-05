@@ -1,0 +1,135 @@
+---
+const agents = ["Claude Code", "Codex", "OpenCode", "Pi", "Grok Build"];
+---
+
+<section id="agents" class="section">
+  <div class="wrap grid">
+    <div>
+      <h2 class="heading">Your agent, inside your notes.</h2>
+      <p class="lede">
+        Open a CLI you already use in the side panel, on the login you already have. Logia doesn't touch your credentials.
+        The note you have open goes along with each message, unsaved edits included, and you can leave it out.
+      </p>
+
+      <ul class="agents">{agents.map((name) => <li>{name}</li>)}</ul>
+
+      <ul class="points">
+        <li><b>Edits land live.</b> Agents write through the running app, into the same editor and save queue you use.</li>
+        <li><b>Your typing wins.</b> A full rewrite must quote the note's revision. If the note changed, it's rejected.</li>
+        <li><b>Permissions stay yours.</b> Each CLI keeps its own settings, and Logia adds no bypass flags.</li>
+      </ul>
+    </div>
+
+    <div class="term" role="img" aria-label="Terminal example: an agent searches, appends to a note, and has a stale rewrite rejected">
+      <div class="term-head"><span>logia-cli</span><span>talks to the running app</span></div>
+      <pre><code><span class="c"># see the note, unsaved edits included</span>
+<span class="p">$</span> logia-cli read
+
+<span class="c"># find something across your notes</span>
+<span class="p">$</span> logia-cli search query="meeting notes"
+
+<span class="c"># add to a note; it appears as you watch</span>
+<span class="p">$</span> logia-cli append file="Plan" content="- [ ] Review"
+
+<span class="c"># replace it, but only if nothing has changed</span>
+<span class="p">$</span> logia-cli write id=NOTE_ID ifRevision=REVISION --stdin
+&#123; "error": &#123; "code": "<span class="e">REVISION_CONFLICT</span>",
+             "message": "Note changed. Read it again before editing." &#125; &#125;</code></pre>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: clamp(64px, 10vw, 120px);
+    border-top: 1px solid var(--ink-800);
+    background: var(--ink-950);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .lede {
+    margin-top: 14px;
+  }
+
+  .agents {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 24px;
+  }
+
+  .agents li {
+    padding: 4px 10px;
+    border: 1px solid var(--ink-800);
+    border-radius: 6px;
+    background: var(--ink-900);
+    color: var(--ink-200);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .points {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+    color: var(--ink-400);
+    font-size: 15px;
+  }
+
+  .points b {
+    color: var(--ink-100);
+    font-weight: 600;
+  }
+
+  .term {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--ink-800);
+    border-radius: 12px;
+    background: var(--ink-925);
+  }
+
+  .term-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--ink-800);
+    color: var(--ink-500);
+    font: 400 12px/1.3 var(--mono);
+  }
+
+  pre {
+    margin: 0;
+    padding: 18px 16px;
+    overflow-x: auto;
+    color: var(--ink-100);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .c {
+    color: var(--ink-500);
+  }
+
+  .p {
+    color: var(--ember-400);
+  }
+
+  .e {
+    color: var(--ember-300);
+    font-weight: 600;
+  }
+
+  @media (max-width: 920px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

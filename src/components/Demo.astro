@@ -1,0 +1,33 @@
+---
+// A recording of the real app. People who ask for less motion get the final frame instead.
+interface Props {
+  name: "agent" | "keyboard" | "tour";
+  alt: string;
+  eager?: boolean;
+}
+const { name, alt, eager = false } = Astro.props;
+---
+
+<figure class="demo">
+  <picture>
+    <source srcset={`/demos/${name}-poster.png`} media="(prefers-reduced-motion: reduce)" />
+    <img src={`/demos/${name}.gif`} alt={alt} width="1200" height="750" loading={eager ? "eager" : "lazy"} decoding="async" />
+  </picture>
+</figure>
+
+<style>
+  .demo {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--ink-800);
+    border-radius: 12px;
+    background: var(--ink-950);
+    box-shadow: 0 40px 100px rgb(0 0 0 / 0.55);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

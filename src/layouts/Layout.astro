@@ -1,96 +1,47 @@
 ---
-import Background from "../components/Background";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/jetbrains-mono";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Logia: a keyboard-first notes app that lets your agents in",
+  description = "Free, open-source desktop notes and canvases. Keep your notes on your machine, drive everything from the keyboard, and let your coding agents work on notes live.",
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/png" href="/logo-text.png" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Logia</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0908" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
 
-		<!-- Facebook Meta Tags -->
-		<meta property="og:url" content="https://getlogia.online" />
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content="Logia" />
-		<meta
-			property="og:description"
-			content="The Intelligent, Open-Source Notes App. AI-powered writing assistance, in-built canvas for visual thinking, and audio transcription built right in."
-		/>
-		<meta property="og:image" content="https://getlogia.online/og.png" />
+    <meta property="og:url" content="https://getlogia.online" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://getlogia.online/og.png" />
 
-		<!-- Twitter Meta Tags -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta property="twitter:domain" content="getlogia.online" />
-		<meta property="twitter:url" content="https://getlogia.online" />
-		<meta name="twitter:title" content="Logia" />
-		<meta
-			name="twitter:description"
-			content="The Intelligent, Open-Source Notes App. AI-powered writing assistance, in-built canvas for visual thinking, and audio transcription built right in."
-		/>
-		<meta name="twitter:image" content="https://getlogia.online/og.png" />
-	</head>
-	<body>
-		<Background client:load />
-		<div class="fade-in-nav">
-			<slot name="header" />
-		</div>
-		<main class="fade-in">
-			<slot />
-		</main>
-	</body>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="getlogia.online" />
+    <meta property="twitter:url" content="https://getlogia.online" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://getlogia.online/og.png" />
+  </head>
+  <body>
+    <slot name="header" />
+    <main>
+      <slot />
+    </main>
+  </body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		overflow-x: hidden;
-	}
-	body {
-		background: transparent;
-	}
-	/* Main content fade with movement and blur */
-	.fade-in {
-		animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-		opacity: 0;
-		will-change: opacity, transform, filter;
-		backface-visibility: hidden;
-	}
-	/* Nav fade only opacity to prevent fixed positioning issues */
-	.fade-in-nav {
-		animation: fadeInNav 1.2s ease-out forwards;
-		opacity: 0;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		z-index: 9999;
-	}
-
-	@keyframes fadeIn {
-		0% {
-			opacity: 0;
-			transform: translateY(20px);
-			filter: blur(10px);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0);
-			filter: blur(0);
-		}
-	}
-
-	@keyframes fadeInNav {
-		0% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-</style>
