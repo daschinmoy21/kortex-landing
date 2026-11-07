@@ -6,33 +6,19 @@ import Agents from "../components/Agents.astro";
 import Tagline from "../components/Tagline.astro";
 import Keyboard from "../components/Keyboard.astro";
 import Everything from "../components/Everything.astro";
-import HowItWorks from "../components/HowItWorks.astro";
-import Faq from "../components/Faq.astro";
+import Audio from "../components/Audio.astro";
 import FinalCta from "../components/FinalCta.astro";
 import Footer from "../components/Footer.astro";
-import { faq } from "../data/faq";
-
-const faqSchema = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faq.map(([name, text]) => ({
-    "@type": "Question",
-    name,
-    acceptedAnswer: { "@type": "Answer", text },
-  })),
-});
 ---
 
 <Layout sharpHero>
-  <script slot="head" type="application/ld+json" set:html={faqSchema} />
   <HeroHeader slot="header" />
   <Hero />
   <Agents />
   <Tagline />
   <Keyboard />
   <Everything />
-  <HowItWorks />
-  <Faq />
+  <Audio />
   <FinalCta />
   <Footer />
 </Layout>

@@ -1,48 +1,31 @@
 ---
+import Bento from "./Bento.astro";
 import Demo from "./Demo.astro";
-
-const features = [
-  ["Block editor", "Slash commands, code blocks and tables, with an optional AI menu in the note."],
-  ["Infinite canvas", "tldraw built in, for sketches and diagrams next to your text."],
-  ["Links and backlinks", "Wikilinks, tags and a panel showing headings and what links here."],
-  ["Daily notes", "Ctrl Shift D opens today's note, kept in its own folder."],
-  ["Task boards", "Kanban boards for what's on your plate, without another app."],
-  ["Audio and transcripts", "Record, then transcribe. Needs Python and FFmpeg on your machine."],
-  ["Any AI provider", "Gemini, OpenAI, Anthropic, OpenRouter and more, or local models through Ollama and LM Studio."],
-  ["Markdown import", "Copy your .md files in. Attachments and folder layouts don't come along yet."],
-];
+import Dither from "./Dither.astro";
 ---
 
 <section id="everything" class="section">
   <div class="wrap">
-    <h2 class="heading-4 md:heading-2 reveal">What else it does</h2>
+    <h2 class="heading-4 md:heading-2 reveal">The rest of the notebook</h2>
     <div class="clip reveal">
       <Demo
         name="tour"
-        alt="A tour of Logia: filtering notes by tag, searching for starred notes, opening a note with its outline, tags, links and backlinks, following a backlink, opening today's note, drawing shapes and arrows on a canvas, and opening the task board."
+        alt="A tour of Logia. In a note, the slash menu adds a heading, a checklist and a table. Then a note opens with its outline, links and backlinks, a backlink is followed, today's note opens with Ctrl Shift D, shapes and arrows are drawn on a canvas, and a task is added and moved on the task board."
       />
     </div>
-    <ul class="list reveal">
-      {
-        features.map(([name, detail]) => (
-          <li class="card">
-            <h3 class="title-3">{name}</h3>
-            <p class="body-6 muted">{detail}</p>
-          </li>
-        ))
-      }
-    </ul>
+    <Bento />
 
     <div class="yours card reveal">
+      <Dither x={1} y={0} spread={0.35} />
       <div>
-        <h2 class="heading-5 md:heading-3">Where your data lives</h2>
+        <h2 class="heading-5 md:heading-3">Plain files. Your Git. Your keys.</h2>
         <p class="body-3 muted lede">
-          Notes live in <code>~/Documents/Logia</code> as JSON files. Sync is Git, to a private remote you choose, on your own
-          SSH keys. API keys go in your OS keychain, and deleted notes wait 14 days in the trash.
+          Every note is a JSON file in <code>~/Documents/Logia</code>. Sync is plain Git, to a private remote you pick, over your own
+          SSH keys. API keys sit in your OS keychain, and deleted notes wait 14 days in the trash before they go.
         </p>
       </div>
       <p class="early body-6 muted">
-        <b>It's still early.</b> Logia started as a personal tool, so expect rough edges. There's no Mac on the desk here to test
+        <b>Heads up: it's early.</b> Logia began as one person's tool, so expect rough edges. There's no Mac on the desk to test
         with, so macOS gets the least attention.
       </p>
     </div>
@@ -54,27 +37,18 @@ const features = [
     margin-top: var(--s-400);
   }
 
-  .list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: var(--s-200);
-    margin-top: var(--s-200);
-  }
-
-  li {
-    padding: var(--s-300);
-  }
-
-  li p {
-    margin-top: var(--s-75);
-  }
-
   .yours {
+    position: relative;
+    overflow: hidden;
     display: grid;
     gap: var(--s-300);
     margin-top: var(--s-200);
     padding: var(--s-300);
     background: var(--bg-warm);
+  }
+
+  .yours > :not(canvas) {
+    position: relative;
   }
 
   .lede {

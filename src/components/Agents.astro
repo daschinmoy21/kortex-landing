@@ -2,19 +2,19 @@
 import AgentLogos from "./AgentLogos.astro";
 
 const points = [
-  ["Edits appear as they're written", "Agents write through the running app, into the same editor and save queue you use."],
-  ["Stale rewrites are rejected", "A full rewrite must quote the note's revision. If the note has changed since, it fails."],
-  ["No permission bypass", "Each CLI keeps its own permission settings. Logia doesn't add flags to skip them."],
+  ["Edits land as you watch", "Agents write through the running app, into the same editor and save queue you type into."],
+  ["Nothing gets clobbered", "A full rewrite has to name the revision it read. If the note moved on since, the write is refused."],
+  ["Your permissions, untouched", "Each CLI keeps its own approval rules. Logia never adds flags to skip them."],
 ];
 ---
 
 <section id="agents" class="section">
   <div class="wrap grid reveal">
     <div>
-      <h2 class="heading-4 md:heading-2">Run your coding agent in the side panel</h2>
+      <h2 class="heading-4 md:heading-2">Your coding agent, right beside the note</h2>
       <p class="body-3 muted lede">
-        Use a CLI you already have, on the login you already have. Logia doesn't touch your credentials. The open note is sent
-        with each message, unsaved edits included, and you can leave it out.
+        Claude Code, Codex and friends run in the side panel on the login you already have. Logia doesn't touch your credentials. The
+        agent gets the open note with each message, unsaved edits included, unless you leave it out.
       </p>
 
       <AgentLogos class="agent-logos" />

@@ -1,242 +1,147 @@
 ---
 import { links } from "../data/release";
+import { starCount } from "../data/stars";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const onDownloads = path === "/downloads";
 
-const sections = [
-  { href: "/#agents", label: "Agents" },
-  { href: "/#keyboard", label: "Keyboard" },
-  { href: "/#everything", label: "Features" },
-  { href: "/#faq", label: "FAQ" },
-];
+const stars = await starCount();
+const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, "")}k+` : String(n));
 ---
 
 <header class="bar">
-  <div class="pill">
-    <a href="/" class="mark" aria-current={path === "/" ? "page" : undefined}>Logia</a>
+  <div class="wrap inner">
+    <a href="/" class="mark" aria-current={path === "/" ? "page" : undefined}>
+      <img src="/favicon.svg" alt="" width="28" height="28" />
+      Logia
+    </a>
     <nav aria-label="Main" class="links">
-      {sections.map((item) => <a href={item.href} class="item title-4">{item.label}</a>)}
-      <a href={links.repo} class="item title-4" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="/downloads" class="download" aria-current={path === "/downloads" ? "page" : undefined}>Download</a>
+      <a href={links.repo} class="item stars" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95z"></path></svg>
+        {
+          stars === null ? (
+            <span>Star<span class="long"> on GitHub</span></span>
+          ) : (
+            <span><b>{compact(stars)}</b><span class="long"> GitHub {stars === 1 ? "star" : "stars"}</span></span>
+          )
+        }
+      </a>
     </nav>
-    <a href="/downloads" class="btn btn-sm btn-primary" aria-current={onDownloads ? "page" : undefined}>Download</a>
-    <button type="button" class="toggle" data-menu-toggle aria-expanded="false" aria-controls="menu" aria-label="Open menu">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </button>
   </div>
 </header>
 
-<!-- A sibling of the bar: the bar's backdrop filter would otherwise trap this fixed panel inside it. -->
-<div id="menu" class="menu" data-menu inert>
-  <nav aria-label="Menu">
-    {sections.map((item) => <a href={item.href} class="heading-4">{item.label}</a>)}
-    <a href={links.repo} class="heading-4" target="_blank" rel="noopener noreferrer">GitHub</a>
-  </nav>
-</div>
-
-<script>
-  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
-  const menu = document.querySelector<HTMLElement>("[data-menu]");
-
-  function setOpen(open: boolean) {
-    if (!toggle || !menu) return;
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-    menu.classList.toggle("open", open);
-    menu.inert = !open;
-    document.documentElement.style.overflow = open ? "hidden" : "";
-  }
-
-  toggle?.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
-  menu?.addEventListener("click", (event) => {
-    if ((event.target as HTMLElement).closest("a")) setOpen(false);
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") {
-      setOpen(false);
-      toggle.focus();
-    }
-  });
-  // Rotating a phone or widening the window past the breakpoint must not leave the page scroll locked.
-  matchMedia("(min-width: 768px)").addEventListener("change", (event) => {
-    if (event.matches) setOpen(false);
-  });
-</script>
-
 <style>
+  /* Sits over the top of the page rather than pushing it down, so the background runs behind it. */
   .bar {
-    position: sticky;
-    top: var(--s-100);
+    position: absolute;
+    inset: 0 0 auto;
     z-index: 50;
-    display: flex;
-    justify-content: center;
-    height: 0;
-    padding-inline: var(--s-75);
+    /* No fill: a soft shadow keeps the text readable over the bright band of the background. */
+    text-shadow: 0 1px 12px rgb(0 0 0 / 0.75), 0 0 2px rgb(0 0 0 / 0.6);
   }
 
-  /* 16px outer radius with 8px padding gives the 8px button radius (B3). */
-  .pill {
+  @media (prefers-reduced-motion: no-preference) {
+    .bar {
+      animation: drop 900ms var(--curve) 350ms backwards;
+    }
+  }
+
+  @keyframes drop {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--s-300)));
+    }
+  }
+
+  .inner {
     display: flex;
     align-items: center;
-    gap: var(--s-50);
-    height: fit-content;
-    padding: var(--s-75);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    background: rgb(24 24 24 / 0.72);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    justify-content: space-between;
+    gap: var(--s-200);
+    padding-block: var(--s-300);
   }
 
   .mark {
-    padding: var(--s-75) var(--s-100);
-    border-radius: 8px;
-    font: 600 14px/20px var(--sans);
-    letter-spacing: -0.01em;
-    transition: background-color 300ms var(--curve);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-75);
+    color: #ffffff;
+    font: 600 20px/28px var(--sans);
+    letter-spacing: -0.02em;
   }
 
-  .mark:hover {
-    background: var(--bg-3);
+  .mark img {
+    display: block;
+    border-radius: 7px;
   }
 
   .links {
-    display: none;
+    display: flex;
     align-items: center;
-    gap: var(--s-50);
-    margin-right: var(--s-100);
+    gap: var(--s-400);
   }
 
   .item {
-    padding: var(--s-75) var(--s-100);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-75);
+    color: var(--ink-100);
+    font: 500 16px/24px var(--sans);
+    white-space: nowrap;
+    transition: color 300ms var(--curve);
+  }
+
+  .item:hover,
+  .item[aria-current="page"] {
+    color: #ffffff;
+  }
+
+  /* The one button in the bar: see-through, with a plain white outline. */
+  .download {
+    padding: var(--s-75) var(--s-200);
+    border: 1px solid rgb(255 255 255 / 0.85);
     border-radius: 8px;
-    color: var(--ink-400);
-    transition:
-      background-color 300ms var(--curve),
-      color 300ms var(--curve);
-  }
-
-  .item:hover {
-    background: var(--bg-3);
-    color: var(--ink-100);
-  }
-
-  .btn[aria-current="page"] {
-    background: var(--bg-3);
-    color: var(--ink-100);
-  }
-
-  .toggle {
-    position: relative;
-    z-index: 2;
-    width: var(--s-500);
-    height: var(--s-500);
-    margin: calc(-1 * var(--s-25)) 0;
-    padding: 0;
-    border: 0;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--ink-100);
-    cursor: pointer;
+    background: rgb(0 0 0 / 0.18);
+    color: #ffffff;
+    font: 600 15px/20px var(--sans);
+    white-space: nowrap;
     transition: background-color 300ms var(--curve);
   }
 
-  .toggle:hover {
-    background: var(--bg-3);
+  .download:hover,
+  .download[aria-current="page"] {
+    background: rgb(255 255 255 / 0.08);
   }
 
-  .toggle span {
-    position: absolute;
-    top: 19px;
-    left: var(--s-100);
-    width: var(--s-200);
-    height: 2px;
-    border-radius: 2px;
-    background: currentColor;
-    transition: transform 500ms var(--curve);
+  .stars svg {
+    width: 16px;
+    height: 16px;
+    color: #ffd166;
+    filter: drop-shadow(0 1px 4px rgb(0 0 0 / 0.7));
   }
 
-  .toggle span:first-child {
-    transform: translateY(-4px);
+  .stars b {
+    color: #ffffff;
+    font-weight: 600;
   }
 
-  .toggle span:last-child {
-    transform: translateY(4px);
-  }
-
-  .toggle[aria-expanded="true"] span:first-child {
-    transform: rotate(45deg);
-  }
-
-  .toggle[aria-expanded="true"] span:last-child {
-    transform: rotate(-45deg);
-  }
-
-  .menu {
-    position: fixed;
-    inset: 0;
-    z-index: 40;
-    padding: var(--s-900) var(--s-300) var(--s-400);
-    background: rgb(0 0 0 / 0.92);
-    -webkit-backdrop-filter: blur(24px);
-    backdrop-filter: blur(24px);
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 300ms var(--curve),
-      visibility 0s step-end 300ms;
-  }
-
-  .menu.open {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 300ms var(--curve);
-  }
-
-  .menu nav {
-    display: grid;
-    gap: var(--s-200);
-  }
-
-  .menu a {
-    width: fit-content;
-    opacity: 0;
-    transform: translateY(var(--s-300));
-    transition:
-      opacity 500ms var(--curve),
-      transform 500ms var(--curve);
-  }
-
-  /* 60ms a step, five links, so the sequence stays under the 400ms cap. */
-  .menu.open a {
-    opacity: 1;
-    transform: none;
-  }
-
-  .menu.open a:nth-child(2) { transition-delay: 60ms; }
-  .menu.open a:nth-child(3) { transition-delay: 120ms; }
-  .menu.open a:nth-child(4) { transition-delay: 180ms; }
-  .menu.open a:nth-child(5) { transition-delay: 240ms; }
-
-  @media (min-width: 768px) {
+  /* Phones: stars shrink to icon + count, and Download moves to the right edge. */
+  @media (max-width: 599px) {
     .links {
-      display: flex;
+      gap: var(--s-200);
     }
 
-    .toggle,
-    .menu {
+    .download {
+      order: 1;
+    }
+
+    .long {
       display: none;
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .menu a {
-      transform: none;
-    }
-
-    .toggle span {
-      transition-duration: 200ms;
+    .item,
+    .download {
+      font-size: 14px;
     }
   }
 </style>

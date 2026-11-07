@@ -1,25 +1,23 @@
 ---
-import AgentLogos from "./AgentLogos.astro";
 import Demo from "./Demo.astro";
 import Icon from "./Icon.astro";
-import { release } from "../data/release";
+import { links, release } from "../data/release";
 ---
 
 <section class="hero">
   <div class="wrap">
     <div class="copy">
-      <h1 class="heading-3 md:heading-1">
-        <span class="line">A local notes app</span>
-        <span class="line">your agent can edit</span>
-      </h1>
-      <p class="body-3 lede">
-        Logia is a free, open source desktop app for notes and canvases. Notes are JSON files on your disk. Claude Code, Codex
-        and other CLIs run in a side panel and edit the note you have open.
+      <h1 class="display"><span><span class="scribble">Notes</span> <span class="w" style="--i: 1">at</span> <span class="w" style="--i: 2">the</span></span> <span><span class="w" style="--i: 3">speed</span> <span class="w" style="--i: 4">of</span> <img class="vim" src="/vim-logo.svg" alt="Vim" width="544" height="545" /></span></h1>
+      <p class="lede enter" style="--d: 760ms">
+        Blocks, backlinks and canvases, synced with Git and kept on your disk.
       </p>
-      <div class="action">
-        <a href="/downloads" class="btn btn-primary"><Icon name="download" /> Download Logia</a>
-        <span class="caption-5 mono meta">v{release.version} · AGPL 3.0</span>
-      </div>
+      <a href="/downloads" class="btn btn-primary cta enter" style="--d: 880ms"><Icon name="download" /> Download Logia</a>
+      <a href={links.repo} class="source title-3 enter" style="--d: 980ms" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
+        Read the code on GitHub
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+      <p class="caption-2 phone enter" style="--d: 1060ms">Android app coming soon · <span class="mono">v{release.version}</span> · AGPL 3.0</p>
       {
         !release.current && (
           <p class="caption-5 behind">
@@ -27,17 +25,13 @@ import { release } from "../data/release";
           </p>
         )
       }
-      <div class="proof">
-        <span class="caption-2 meta">Works with</span>
-        <AgentLogos class="row" />
-      </div>
     </div>
 
-    <div class="shot">
+    <div class="shot enter-shot">
       <Demo
-        name="agent"
+        name="hero"
         eager
-        alt="Logia with a note open. Claude Code is asked in the side panel to turn the note's open questions into a task list, and the tasks appear in the note."
+        alt="Logia driven from the keyboard. The command palette opens a Rust note on a token bucket rate limiter, and Space a opens Claude Code in the side panel. Asked for a diagram, the agent adds a rendered Mermaid flowchart of the request path to the note. Asked for a playground, it adds a live artifact with capacity and refill-rate sliders and a chart of tokens, and dragging the sliders changes how many requests are rejected."
       />
     </div>
   </div>
@@ -50,35 +44,86 @@ import { release } from "../data/release";
   }
 
   .copy {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  h1 {
-    max-width: 680px;
+  .display {
+    max-width: 13ch;
     color: #ffffff;
+    font: 600 clamp(40px, 7.2vw, 92px) / 1 var(--sans);
+    letter-spacing: -0.045em;
+    text-wrap: balance;
     text-shadow: 0 0 32px rgb(0 0 0 / 0.55);
   }
 
+  /* Handwritten, like a note. Caveat runs small, so it is scaled up to sit level with the sans. */
+  .scribble {
+    display: inline-block;
+    margin-right: 0.04em;
+    font-family: "Caveat", cursive;
+    font-size: 1.28em;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.8;
+    transform: rotate(-3deg);
+  }
+
+  /* The word Vim is the Vim logo itself. */
+  .vim {
+    display: inline-block;
+    width: auto;
+    height: 1.18em;
+    margin-left: 0.04em;
+    vertical-align: -0.24em;
+    filter: drop-shadow(0 8px 24px rgb(1 152 51 / 0.35));
+  }
+
   .lede {
-    max-width: 680px;
+    max-width: 620px;
     margin-top: var(--s-300);
     color: var(--ink-100);
+    font-size: clamp(16px, 1.6vw, 19px);
+    line-height: 1.55;
+    text-wrap: pretty;
     text-shadow: 0 0 16px rgb(0 0 0 / 0.8);
   }
 
-  .action {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: var(--s-100) var(--s-200);
-    margin-top: var(--s-400);
+  .cta {
+    margin-top: var(--s-500);
+    padding: var(--s-100) var(--s-300);
+    border-radius: 10px;
+    font-size: 17px;
   }
 
-  .meta {
+  .source {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-75);
+    margin-top: var(--s-300);
+    color: var(--ink-100);
+    transition: color 300ms var(--curve);
+  }
+
+  .source:hover {
+    color: #ffffff;
+  }
+
+  .source svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .arrow {
+    color: var(--ink-300);
+    font-size: 13px;
+  }
+
+  .phone {
+    margin-top: var(--s-200);
     color: var(--ink-300);
   }
 
@@ -87,30 +132,132 @@ import { release } from "../data/release";
     color: var(--ink-300);
   }
 
-  .proof {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--s-100);
-    margin-top: var(--s-500);
-  }
-
-  .proof :global(.row) {
-    justify-content: center;
-  }
-
   .shot {
-    margin-top: var(--s-600);
+    margin-top: var(--s-700);
+  }
+
+  /* One line per half of the sentence once there is room for it. */
+  @media (min-width: 768px) {
+    .display {
+      max-width: none;
+    }
+
+    .display > span {
+      display: block;
+    }
   }
 
   @media (min-width: 768px) {
     .hero {
       padding-top: calc(2 * var(--s-900));
     }
+  }
+  /* Opening sequence. "Notes" is written on like ink, the other words rise out of a blur one by one,
+     the Vim logo pops in last, then the rest of the hero and the demo follow. */
+  @media (prefers-reduced-motion: no-preference) {
+    .scribble {
+      animation: ink 900ms cubic-bezier(0.65, 0, 0.35, 1) 150ms backwards;
+    }
 
-    .proof {
-      flex-direction: row;
-      gap: var(--s-300);
+    .w {
+      display: inline-block;
+      animation: rise 900ms var(--curve) calc(220ms + var(--i) * 90ms) backwards;
+    }
+
+    .vim {
+      animation: pop 900ms cubic-bezier(0.34, 1.56, 0.64, 1) 640ms backwards;
+    }
+
+    .enter {
+      animation: lift 800ms var(--curve) var(--d) backwards;
+    }
+
+    .shot {
+      perspective: 1600px;
+    }
+
+    .enter-shot > :global(*) {
+      transform-origin: 50% 0;
+      animation: tilt 1400ms var(--curve) 1000ms backwards;
+    }
+
+    /* One shine across the button once it has landed. */
+    .cta {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+      transform: translateX(-120%);
+      animation: shine 1100ms var(--curve) 1700ms both;
+      pointer-events: none;
+    }
+  }
+
+  @keyframes ink {
+    from {
+      clip-path: inset(-20% 100% -20% -10%);
+      opacity: 0.4;
+    }
+    to {
+      clip-path: inset(-20% -10% -20% -10%);
+      opacity: 1;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      filter: blur(14px);
+      transform: translateY(0.4em);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: none;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.3) rotate(-25deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes lift {
+    from {
+      opacity: 0;
+      transform: translateY(var(--s-300));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes tilt {
+    from {
+      opacity: 0;
+      transform: translateY(var(--s-700)) rotateX(18deg) scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes shine {
+    to {
+      transform: translateX(120%);
     }
   }
 </style>

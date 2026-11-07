@@ -3,6 +3,8 @@ import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
 import "../styles/global.css";
 import AsciiBackground from "../components/AsciiBackground.astro";
+import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import caveat from "@fontsource/caveat/files/caveat-latin-700-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -13,8 +15,8 @@ interface Props {
 
 const {
   sharpHero = false,
-  title = "Logia: a local notes app your agent can edit",
-  description = "A free, open source desktop app for notes and canvases. Notes are files on your disk, Vim mode is optional, and Claude Code, Codex and other CLIs can edit the note you have open.",
+  title = "Logia: notes at the speed of Vim",
+  description = "A free, open source notes app for Vim users. Blocks, backlinks and canvases, synced with Git and kept on your disk.",
 } = Astro.props;
 ---
 
@@ -41,6 +43,18 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://getlogia.online/og.png" />
+
+    <!-- Fetch the headline fonts with the page so they don't swap in after first paint. -->
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
+    {
+      sharpHero && (
+        <>
+          <link rel="preload" href={caveat} as="font" type="font/woff2" crossorigin />
+          {/* Block, not swap: the scribbled "Notes" should never show in the fallback font. */}
+          <style is:inline set:html={`@font-face{font-family:"Caveat";font-style:normal;font-weight:700;font-display:block;src:url(${caveat}) format("woff2")}`} />
+        </>
+      )
+    }
 
     <script is:inline>document.documentElement.classList.add("js");</script>
     <slot name="head" />

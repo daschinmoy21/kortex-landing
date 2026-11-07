@@ -1,0 +1,128 @@
+---
+// An ordered-dither (Bayer 8x8) glow drawn behind a card. The parent must be position: relative
+// with overflow hidden; content that should sit above it needs position: relative too.
+// x and y place the glow's centre as fractions of the card, spread is its radius as a fraction of
+// the card's longer side, and cell is the size of one dither pixel in CSS pixels.
+interface Props {
+  x?: number;
+  y?: number;
+  spread?: number;
+  cell?: number;
+  class?: string;
+}
+const { x = 0.5, y = 0, spread = 0.8, cell = 3, class: className } = Astro.props;
+---
+
+<canvas
+  class:list={["dither", className]}
+  data-dither
+  data-x={x}
+  data-y={y}
+  data-spread={spread}
+  data-cell={cell}
+  aria-hidden="true"></canvas>
+
+<script>
+  // Bayer 8x8 thresholds, 0..63.
+  const bayer = [
+    0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22, 3,
+    35, 11, 43, 1, 33, 9, 41, 51, 19, 59, 27, 49, 17, 57, 25, 15, 47, 7, 39, 13, 45, 5, 37, 63, 31, 55, 23, 61, 29, 53, 21,
+  ];
+
+  // How far each canvas has dissolved in, from 0 (empty) to 1 (full). Pixels appear in Bayer order,
+  // so the glow builds up the way an ordered dither fills a gradient.
+  const progress = new WeakMap<HTMLCanvasElement, number>();
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const draw = (canvas: HTMLCanvasElement) => {
+    const box = canvas.getBoundingClientRect();
+    const cell = Number(canvas.dataset.cell) || 3;
+    const w = Math.max(1, Math.round(box.width / cell));
+    const h = Math.max(1, Math.round(box.height / cell));
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const t = progress.get(canvas) ?? 0;
+    const image = context.createImageData(w, h);
+    const cx = Number(canvas.dataset.x) * w;
+    const cy = Number(canvas.dataset.y) * h;
+    const radius = Number(canvas.dataset.spread) * Math.max(w, h);
+
+    for (let row = 0; row < h; row++) {
+      for (let col = 0; col < w; col++) {
+        const threshold = (bayer[(row % 8) * 8 + (col % 8)] + 0.5) / 64;
+        if (threshold > t) continue;
+        // Squash vertically a little so the glow reads as a wide arc, like the page background.
+        const d = Math.hypot(col - cx, (row - cy) * 1.4) / radius;
+        const v = Math.max(0, 1 - d) ** 1.6;
+        if (v <= threshold) continue;
+        const i = (row * w + col) * 4;
+        // Brighter where the field is strong: pale ember near the centre, deep ember at the edge.
+        const hot = v > 0.6;
+        image.data[i] = hot ? 255 : 244;
+        image.data[i + 1] = hot ? 171 : 122;
+        image.data[i + 2] = hot ? 120 : 53;
+        image.data[i + 3] = Math.round(70 + 120 * v);
+      }
+    }
+    context.putImageData(image, 0, 0);
+  };
+
+  const dissolve = (canvas: HTMLCanvasElement) => {
+    if (calm) {
+      progress.set(canvas, 1);
+      draw(canvas);
+      return;
+    }
+    const start = performance.now();
+    const step = (now: number) => {
+      const linear = Math.min(1, (now - start) / 1200);
+      progress.set(canvas, 1 - (1 - linear) ** 3);
+      draw(canvas);
+      if (linear < 1) requestAnimationFrame(step);
+    };
+    // Waits for the card's own scroll reveal to get going.
+    setTimeout(() => requestAnimationFrame(step), 200);
+  };
+
+  const canvases = [...document.querySelectorAll<HTMLCanvasElement>("canvas[data-dither]")];
+  const resize = new ResizeObserver((entries) => entries.forEach((entry) => draw(entry.target as HTMLCanvasElement)));
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        seen.unobserve(entry.target);
+        dissolve(entry.target as HTMLCanvasElement);
+      }
+    },
+    { rootMargin: "0px 0px -10% 0px" },
+  );
+  canvases.forEach((canvas) => {
+    resize.observe(canvas);
+    seen.observe(canvas);
+  });
+</script>
+
+
+<style>
+  .dither {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    pointer-events: none;
+    opacity: 0.55;
+    transition: opacity 500ms var(--curve);
+  }
+
+  /* Cards light up a little on hover. */
+  :global(:hover) > .dither {
+    opacity: 0.8;
+  }
+</style>

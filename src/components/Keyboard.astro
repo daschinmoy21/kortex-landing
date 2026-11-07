@@ -1,5 +1,6 @@
 ---
 import Demo from "./Demo.astro";
+import Dither from "./Dither.astro";
 
 // Every binding here comes from the app's README. Keep them in step with it.
 // Keys are space separated, one cap each. A "/" after the first key reads as "or".
@@ -9,26 +10,27 @@ const groups = [
     rows: [
       ["Ctrl P", "Find a note"],
       ["Ctrl Shift P", "Run a command"],
-      ["Ctrl H / L", "Move between panes"],
-      ["Ctrl \\", "Pin or hide the sidebar"],
+      ["Ctrl H / L", "Switch pane"],
+      ["Ctrl \\", "Toggle sidebar"],
     ],
   },
   {
-    name: "Leader, with Vim on",
+    name: "Leader",
+    note: "Vim on",
     rows: [
       ["Space e", "File explorer"],
-      ["Space f", "Find note"],
-      ["Space a", "AI panel"],
-      ["Space t", "To do board"],
+      ["Space f", "Find a note"],
+      ["Space a", "Agent panel"],
+      ["Space t", "Task board"],
     ],
   },
   {
     name: "In a note",
     rows: [
-      ["c i w", "Change a word"],
-      ['d i "', "Delete inside quotes"],
-      ["/ n N", "Search and jump"],
-      ["g g G", "Top and bottom"],
+      ["c i w", "Change word"],
+      ['d i "', "Delete in quotes"],
+      ["/ n N", "Search, jump"],
+      ["g g G", "Top, bottom"],
     ],
   },
 ];
@@ -45,13 +47,13 @@ const commands = [
 <section id="keyboard" class="section">
   <div class="wrap">
     <div class="reveal">
-      <h2 class="heading-4 md:heading-2">Use it without a mouse</h2>
+      <h2 class="heading-4 md:heading-2">Your hands never leave the keys</h2>
       <p class="body-3 muted lede">
-        Panes, tabs, the file tree and the agent panel all work from the keyboard. Vim mode is optional, and covers motions,
-        operators, text objects, registers and a <code>:</code> command line.
+        Panes, tabs, the file tree and the agent panel all answer to the keyboard. Switch on Vim mode for motions, operators,
+        text objects, registers and a real <code>:</code> command line.
       </p>
       <p class="caption-2 quiet try">
-        Two of them work on this page: <kbd class="key">g</kbd> <kbd class="key">g</kbd> goes to the top and <kbd class="key">G</kbd> to the bottom.
+        Try it here: <kbd class="key">g</kbd> <kbd class="key">g</kbd> jumps to the top, <kbd class="key">G</kbd> to the bottom.
       </p>
     </div>
 
@@ -63,37 +65,47 @@ const commands = [
     </div>
 
     <div class="sheet reveal">
-      {
-        groups.map((group) => (
-          <div class="group card">
-            <h3 class="title-4">{group.name}</h3>
-            <dl>
-              {group.rows.map(([keys, action]) => (
+      <Dither x={0.5} y={0} spread={0.4} />
+      <p class="bar caption-5 mono">
+        <span class="mode">NORMAL</span>
+        <span class="quiet">cheat sheet</span>
+      </p>
+      <div class="cols">
+        {
+          groups.map((group) => (
+            <div class="group">
+              <h3 class="label caption-4 mono">
+                {group.name}
+                {group.note && <span class="quiet">· {group.note}</span>}
+              </h3>
+              <dl>
+                {group.rows.map(([keys, action]) => (
+                  <div class="row">
+                    <dt>
+                      {keys.split(" ").map((key, index) =>
+                        key === "/" && index > 0 ? <span class="caption-5 quiet">or</span> : <kbd class="key">{key}</kbd>,
+                      )}
+                    </dt>
+                    <dd class="body-6 muted">{action}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))
+        }
+        <div class="group">
+          <h3 class="label caption-4 mono">Command line</h3>
+          <dl>
+            {
+              commands.map(([command, action]) => (
                 <div class="row">
-                  <dt>
-                    {keys.split(" ").map((key, index) =>
-                      key === "/" && index > 0 ? <span class="caption-5 quiet">or</span> : <kbd class="key">{key}</kbd>,
-                    )}
-                  </dt>
+                  <dt class="command body-5 mono">{command}</dt>
                   <dd class="body-6 muted">{action}</dd>
                 </div>
-              ))}
-            </dl>
-          </div>
-        ))
-      }
-      <div class="group card">
-        <h3 class="title-4">Command line</h3>
-        <dl>
-          {
-            commands.map(([command, action]) => (
-              <div class="row">
-                <dt class="command body-5 mono">{command}</dt>
-                <dd class="body-6 muted">{action}</dd>
-              </div>
-            ))
-          }
-        </dl>
+              ))
+            }
+          </dl>
+        </div>
       </div>
     </div>
   </div>
@@ -148,36 +160,112 @@ const commands = [
     margin-top: var(--s-400);
   }
 
+  /* One panel, like a which-key popup: a mode line on top, then the groups in columns. */
   .sheet {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--s-200);
+    position: relative;
+    overflow: hidden;
     margin-top: var(--s-200);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--bg-1);
+  }
+
+  .bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    padding: var(--s-100) var(--s-300);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mode {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--ember-500);
+    color: var(--bg-0);
+    font-weight: 600;
+  }
+
+  .cols {
+    position: relative;
+    display: grid;
   }
 
   .group {
     padding: var(--s-300);
   }
 
+  .group + .group {
+    border-top: 1px solid var(--line);
+  }
+
+  .label {
+    display: flex;
+    gap: var(--s-50);
+    color: var(--ember-300);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
   dl {
     display: grid;
-    gap: var(--s-200);
+    gap: var(--s-100);
     margin-top: var(--s-200);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-200);
   }
 
   dt {
     display: flex;
-    flex-wrap: wrap;
+    flex: none;
     align-items: center;
     gap: var(--s-50);
     min-height: var(--s-300);
   }
 
-  .command {
-    color: var(--ember-300);
+  dd {
+    text-align: right;
   }
 
-  dd {
-    margin-top: var(--s-50);
+  .command {
+    color: var(--ink-100);
+  }
+
+  @media (min-width: 640px) {
+    .cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .group + .group {
+      border-top: 0;
+    }
+
+    .group:nth-child(even) {
+      border-left: 1px solid var(--line);
+    }
+
+    .group:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .group:nth-child(n + 2) {
+      border-left: 1px solid var(--line);
+    }
+
+    .group:nth-child(n + 3) {
+      border-top: 0;
+    }
   }
 </style>

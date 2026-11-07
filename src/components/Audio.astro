@@ -1,0 +1,75 @@
+---
+import Demo from "./Demo.astro";
+---
+
+<section id="audio" class="section">
+  <div class="wrap">
+    <div class="grid reveal">
+      <div>
+        <h2 class="heading-4 md:heading-2">Record the call. Skip the minutes.</h2>
+        <p class="body-3 muted lede">
+          Hit record in the sidebar and talk. When you stop, faster-whisper transcribes it on your machine, and your AI provider
+          turns the transcript into headings, lists and tasks at the end of the note.
+        </p>
+      </div>
+      <ul class="points body-6 muted">
+        <li>Pair it with Ollama or LM Studio and the audio never leaves your computer.</li>
+        <li>No provider? You still get the raw transcript.</li>
+        <li>Needs Python and FFmpeg. Settings installs everything else.</li>
+      </ul>
+    </div>
+
+    <div class="clip reveal">
+      <Demo
+        name="audio"
+        alt="A note called Design review. Record audio is pressed in the sidebar and a timer runs in the status bar. After stopping, the status shows Transcribing, then Structuring with Ollama, and a structured section appears in the note: a summary, the decisions as a list, and the action items as a checklist."
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--s-400);
+  }
+
+  .lede {
+    margin-top: var(--s-100);
+    max-width: 560px;
+  }
+
+  .points {
+    display: grid;
+    gap: var(--s-75);
+    max-width: 520px;
+  }
+
+  .clip {
+    margin-top: var(--s-400);
+  }
+
+  .points li {
+    padding-left: var(--s-200);
+    position: relative;
+  }
+
+  .points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--ember-500);
+  }
+
+  @media (min-width: 1000px) {
+    .grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--s-700);
+      align-items: end;
+    }
+  }
+</style>

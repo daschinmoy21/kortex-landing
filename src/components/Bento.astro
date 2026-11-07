@@ -1,0 +1,566 @@
+---
+// The feature bento under the tour. Every tile draws a small piece of the app from plain HTML and SVG,
+// so there are no screenshots to keep up to date. Labels match what the app shows.
+// Provider marks are the app's own files; Anthropic uses the Claude mark, as the app's ProviderIcon does.
+import claude from "../assets/providers/claude-color.svg?raw";
+import gemini from "../assets/providers/gemini-color.svg?raw";
+import lmstudio from "../assets/providers/lmstudio.svg?raw";
+import mistral from "../assets/providers/mistral-color.svg?raw";
+import ollama from "../assets/providers/ollama.svg?raw";
+import openai from "../assets/providers/openai.svg?raw";
+import openrouter from "../assets/providers/openrouter.svg?raw";
+import Dither from "./Dither.astro";
+
+const providers = [
+  { name: "Gemini", logo: gemini },
+  { name: "OpenAI", logo: openai },
+  { name: "Anthropic", logo: claude },
+  { name: "OpenRouter", logo: openrouter },
+  { name: "Mistral", logo: mistral },
+  { name: "Ollama", logo: ollama, local: true },
+  { name: "LM Studio", logo: lmstudio, local: true },
+];
+const slash = [
+  { icon: "H₂", label: "Heading 2" },
+  { icon: "☐", label: "Check List", active: true },
+  { icon: "▦", label: "Table" },
+  { icon: "{}", label: "Code Block" },
+];
+const board = [
+  { name: "Todo", cards: ["Send the survey", "Book two more calls"] },
+  { name: "Doing", cards: ["Write up themes"] },
+  { name: "Done", cards: ["Recruit people"] },
+];
+---
+
+<ul class="bento">
+  <li class="tile editor reveal">
+    <Dither x={0.2} y={0} spread={0.75} />
+    <div class="art">
+      <div class="note">
+        <p class="h">Before launch</p>
+        <p class="line"><span class="slash">/</span>check<span class="caret"></span></p>
+        <div class="menu">
+          <p class="group mono">Basic blocks</p>
+          {
+            slash.map((item) => (
+              <p class:list={["item", { active: item.active }]}>
+                <span class="glyph">{item.icon}</span>
+                {item.label}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+    <div class="text">
+      <h3 class="title-2">Slash for anything</h3>
+      <p class="body-6 muted">Hit <kbd class="key">/</kbd> for headings, checklists, tables and code. Blocks you can move, not a wall of text.</p>
+    </div>
+  </li>
+
+  <li class="tile canvas reveal">
+    <Dither x={0.9} y={0.1} spread={0.8} />
+    <div class="art">
+      <svg viewBox="0 0 320 170" aria-hidden="true">
+        <defs>
+          <pattern id="bento-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1" fill="rgb(255 255 255 / 0.09)"></circle>
+          </pattern>
+          <marker id="bento-head" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 10 5 0 10z" fill="#f8f5ef"></path>
+          </marker>
+        </defs>
+        <rect width="320" height="170" fill="url(#bento-dots)"></rect>
+        <g fill="none" stroke="#f8f5ef" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M34 36c28-2 62-1 92 0 1 13 1 27 0 40-31 1-62 1-92 0-1-13-1-27 0-40z"></path>
+          <ellipse cx="236" cy="56" rx="52" ry="26"></ellipse>
+          <path d="M104 116c30-1 64-1 96 0 1 12 1 25 0 37-32 1-64 1-96 0-1-12-1-25 0-37z" stroke="#f47a35"></path>
+          <path d="M128 56c16-1 36-1 54 0" marker-end="url(#bento-head)"></path>
+          <path d="M214 82c-10 10-22 20-34 30" marker-end="url(#bento-head)"></path>
+        </g>
+        <g fill="#f8f5ef" font-size="13" font-weight="600" text-anchor="middle" font-family="var(--sans)">
+          <text x="80" y="61">Interviews</text>
+          <text x="236" y="61">Themes</text>
+          <text x="152" y="139" fill="#ffab78">Next study</text>
+        </g>
+      </svg>
+    </div>
+    <div class="text">
+      <h3 class="title-2">Room to think</h3>
+      <p class="body-6 muted">An infinite tldraw canvas for the diagrams that don't fit in a list. It lives beside your notes.</p>
+    </div>
+  </li>
+
+  <li class="tile links reveal">
+    <Dither x={0.5} y={0.35} spread={0.6} />
+    <div class="art">
+      <svg viewBox="0 0 240 170" aria-hidden="true">
+        <g stroke="rgb(255 255 255 / 0.18)" stroke-width="1.5">
+          <line x1="120" y1="85" x2="44" y2="34"></line>
+          <line x1="120" y1="85" x2="200" y2="40"></line>
+          <line x1="120" y1="85" x2="60" y2="140"></line>
+          <line x1="120" y1="85" x2="190" y2="134"></line>
+        </g>
+        <circle cx="120" cy="85" r="10" fill="#f47a35"></circle>
+        <circle cx="120" cy="85" r="20" fill="none" stroke="rgb(244 122 53 / 0.35)"></circle>
+        <g fill="#2a2a2a" stroke="rgb(255 255 255 / 0.3)">
+          <circle cx="44" cy="34" r="6"></circle>
+          <circle cx="200" cy="40" r="6"></circle>
+          <circle cx="60" cy="140" r="6"></circle>
+          <circle cx="190" cy="134" r="6"></circle>
+        </g>
+      </svg>
+      <span class="chip mono one">[[Reading list]]</span>
+      <span class="chip mono two">#research</span>
+    </div>
+    <div class="text">
+      <h3 class="title-2">Everything links back</h3>
+      <p class="body-6 muted"><code>[[Wikilinks]]</code> and <code>#tags</code>, plus a panel with the outline and every note that points here.</p>
+    </div>
+  </li>
+
+  <li class="tile daily reveal">
+    <Dither x={0.5} y={0.2} spread={0.7} />
+    <div class="art">
+      <div class="page">
+        <span class="month mono">Nov</span>
+        <span class="day">06</span>
+      </div>
+      <p class="keys"><kbd class="key">Ctrl</kbd><kbd class="key">Shift</kbd><kbd class="key">D</kbd></p>
+    </div>
+    <div class="text">
+      <h3 class="title-2">A page for today</h3>
+      <p class="body-6 muted">One shortcut and today's note is open, filed in its own folder.</p>
+    </div>
+  </li>
+
+  <li class="tile tasks reveal">
+    <Dither x={0.1} y={0} spread={0.75} />
+    <div class="art">
+      <div class="board">
+        {
+          board.map((column) => (
+            <div class="column">
+              <p class="caption-4 head">
+                {column.name} <span class="count">{column.cards.length}</span>
+              </p>
+              {column.cards.map((card) => <p class="card-item caption-5">{card}</p>)}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <div class="text">
+      <h3 class="title-2">Boards for the to-dos</h3>
+      <p class="body-6 muted">A kanban board for what's on your plate. Move cards without touching the mouse.</p>
+    </div>
+  </li>
+
+  <li class="tile ai reveal">
+    <Dither x={0.5} y={0.05} spread={0.6} />
+    <div class="art">
+      <div class="chips">
+        {
+          providers.map((provider) => (
+            <span class:list={["provider", { local: provider.local }]}>
+              <span class="logo" aria-hidden="true" set:html={provider.logo} />
+              {provider.name}
+              {provider.local && <span class="badge mono">local</span>}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+    <div class="text">
+      <h3 class="title-2">Bring any model</h3>
+      <p class="body-6 muted">Plug in a key for Gemini, OpenAI, Anthropic, OpenRouter or Mistral. Or stay offline with Ollama and LM Studio.</p>
+    </div>
+  </li>
+
+  <li class="tile markdown reveal">
+    <Dither x={0.75} y={0.3} spread={0.7} />
+    <div class="art">
+      <div class="files">
+        <span class="file mono">meeting.md</span>
+        <span class="file mono">ideas.md</span>
+        <span class="file mono">reading.md</span>
+      </div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <span class="into">
+        <img src="/favicon.svg" alt="" width="40" height="40" />
+      </span>
+    </div>
+    <div class="text">
+      <h3 class="title-2">Bring your Markdown</h3>
+      <p class="body-6 muted">Drop your <code>.md</code> files in and keep writing. Attachments and folders don't carry over yet.</p>
+    </div>
+  </li>
+</ul>
+
+<style>
+  .bento {
+    display: grid;
+    gap: var(--s-200);
+    margin-top: var(--s-200);
+  }
+
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--bg-1);
+    transition:
+      border-color 300ms var(--curve),
+      transform 500ms var(--curve);
+  }
+
+  .tile:hover {
+    border-color: rgb(244 122 53 / 0.35);
+  }
+
+  .art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    padding: var(--s-300);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+    mask-image: linear-gradient(to bottom, black 70%, transparent);
+  }
+
+  .art svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Tall enough that the highlighted menu item is always in view. */
+  .editor .art {
+    height: 250px;
+  }
+
+  .text {
+    position: relative;
+    padding: 0 var(--s-300) var(--s-300);
+  }
+
+  .text code {
+    color: var(--ink-100);
+    font-size: 13px;
+  }
+
+  .text p {
+    margin-top: var(--s-50);
+    max-width: 46ch;
+  }
+
+  .text .key {
+    min-width: 20px;
+    height: 20px;
+    vertical-align: 1px;
+  }
+
+  /* Editor: a note with the slash menu open. */
+  .note {
+    width: min(100%, 380px);
+    align-self: flex-start;
+  }
+
+  .note .h {
+    color: #ffffff;
+    font: 600 20px/28px var(--sans);
+  }
+
+  .note .line {
+    margin-top: var(--s-75);
+    color: var(--ink-100);
+    font: 400 15px/22px var(--sans);
+  }
+
+  .slash {
+    color: var(--ember-400);
+  }
+
+  .caret {
+    display: inline-block;
+    width: 2px;
+    height: 17px;
+    margin-left: 1px;
+    vertical-align: -3px;
+    background: var(--ember-400);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  .menu {
+    width: 220px;
+    margin-top: var(--s-75);
+    padding: var(--s-50);
+    border: 1px solid var(--bg-4);
+    border-radius: 10px;
+    background: var(--bg-2);
+    box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
+  }
+
+  .menu .group {
+    padding: var(--s-50) var(--s-75);
+    color: var(--ink-400);
+    font-size: 11px;
+  }
+
+  .menu .item {
+    display: flex;
+    align-items: center;
+    gap: var(--s-75);
+    padding: 6px var(--s-75);
+    border-radius: 6px;
+    color: var(--ink-200, var(--ink-100));
+    font: 500 13px/18px var(--sans);
+  }
+
+  .menu .item.active {
+    background: var(--bg-4);
+    color: #ffffff;
+  }
+
+  .glyph {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--bg-4);
+    border-radius: 5px;
+    background: var(--bg-3);
+    color: var(--ink-300);
+    font-size: 11px;
+  }
+
+  /* Links: chips over the graph. */
+  .chip {
+    position: absolute;
+    padding: 3px 8px;
+    border: 1px solid var(--bg-4);
+    border-radius: 6px;
+    background: var(--bg-2);
+    color: var(--ink-100);
+    font-size: 11px;
+  }
+
+  .chip.one {
+    top: 28px;
+    left: 16px;
+  }
+
+  .chip.two {
+    right: 16px;
+    bottom: 42px;
+    color: var(--ember-300);
+  }
+
+  /* Daily: a calendar page. */
+  .daily .art {
+    flex-direction: column;
+    gap: var(--s-200);
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 96px;
+    overflow: hidden;
+    border: 1px solid var(--bg-4);
+    border-radius: 14px;
+    background: var(--bg-2);
+    box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
+  }
+
+  .month {
+    width: 100%;
+    padding: 4px 0;
+    background: var(--ember-500);
+    color: var(--bg-0);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .day {
+    padding: 6px 0 10px;
+    color: #ffffff;
+    font: 600 40px/1 var(--sans);
+    letter-spacing: -0.03em;
+  }
+
+  .keys {
+    display: flex;
+    gap: var(--s-50);
+  }
+
+  /* Tasks: three columns. */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-75);
+    width: 100%;
+    align-self: flex-start;
+  }
+
+  .column {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: var(--s-75);
+    border: 1px solid var(--bg-3);
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.02);
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    color: var(--ink-300);
+  }
+
+  .count {
+    color: var(--ink-500, var(--ink-300));
+  }
+
+  .card-item {
+    padding: 6px 8px;
+    border: 1px solid var(--bg-4);
+    border-radius: 6px;
+    background: var(--bg-2);
+    color: var(--ink-100);
+  }
+
+  .column:last-child .card-item {
+    color: var(--ink-400);
+    text-decoration: line-through;
+  }
+
+  /* AI: provider chips. */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-75);
+    max-width: 540px;
+  }
+
+  .provider {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-75);
+    padding: 8px 14px;
+    border: 1px solid var(--bg-4);
+    border-radius: 999px;
+    background: var(--bg-2);
+    color: var(--ink-100);
+    font: 500 14px/20px var(--sans);
+  }
+
+  .provider .logo {
+    display: inline-flex;
+    flex: none;
+    width: 16px;
+    height: 16px;
+  }
+
+  .provider .logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .provider.local {
+    border-color: rgb(244 122 53 / 0.4);
+  }
+
+  .badge {
+    color: var(--ember-300);
+    font-size: 11px;
+  }
+
+  /* Markdown: files going in. */
+  .markdown .art {
+    gap: var(--s-300);
+  }
+
+  .files {
+    display: grid;
+    gap: 6px;
+  }
+
+  .file {
+    padding: 6px 10px;
+    border: 1px solid var(--bg-4);
+    border-radius: 6px;
+    background: var(--bg-2);
+    color: var(--ink-100);
+    font-size: 12px;
+  }
+
+  .file:nth-child(2) {
+    transform: translateX(10px);
+  }
+
+  .arrow {
+    color: var(--ember-400);
+    font-size: 24px;
+  }
+
+  .into img {
+    display: block;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgb(244 122 53 / 0.25);
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .caret {
+      animation: none;
+    }
+  }
+
+  /* Two columns, then the full twelve-column bento with tiles of different widths. */
+  @media (min-width: 700px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .editor,
+    .ai {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .bento {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .editor { grid-column: span 7; }
+    .canvas { grid-column: span 5; }
+    .links { grid-column: span 4; }
+    .daily { grid-column: span 3; }
+    .tasks { grid-column: span 5; }
+    .ai { grid-column: span 7; }
+    .markdown { grid-column: span 5; }
+
+    .editor .art,
+    .canvas .art {
+      height: 250px;
+    }
+  }
+</style>

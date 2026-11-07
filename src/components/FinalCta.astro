@@ -6,8 +6,8 @@ import { nixReleaseCommand } from "../data/release";
 
 <section class="final">
   <div class="wrap inner reveal">
-    <h2 class="heading-3 md:heading-2">Try Logia</h2>
-    <p class="body-3 muted">Free and open source, for Linux, Windows and macOS.</p>
+    <h2 class="heading-3 md:heading-2"><span class="mono cmd">:wq</span> your old notes app</h2>
+    <p class="body-3 muted">Free and open source. Linux, Windows and macOS.</p>
     <a href="/downloads" class="btn btn-primary"><Icon name="download" /> Download Logia</a>
     <div class="well nix">
       <CopyCommand command={nixReleaseCommand} />
@@ -16,6 +16,13 @@ import { nixReleaseCommand } from "../data/release";
 </section>
 
 <style>
+  .cmd {
+    color: var(--ember-400);
+    font-weight: 500;
+    letter-spacing: -0.12em;
+    margin-right: 0.12em;
+  }
+
   .final {
     padding-block: var(--s-800);
   }
