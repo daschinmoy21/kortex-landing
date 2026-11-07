@@ -15,7 +15,7 @@ const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0
       Logia
     </a>
     <nav aria-label="Main" class="links">
-      <a href="/downloads" class="download" aria-current={path === "/downloads" ? "page" : undefined}>Download</a>
+      <a href="/downloads" class="btn btn-ghost download" aria-current={path === "/downloads" ? "page" : undefined}>Download</a>
       <a href={links.repo} class="item stars" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95z"></path></svg>
         {
@@ -36,8 +36,8 @@ const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0
     position: absolute;
     inset: 0 0 auto;
     z-index: 50;
-    /* No fill: a soft shadow keeps the text readable over the bright band of the background. */
-    text-shadow: 0 1px 12px rgb(0 0 0 / 0.75), 0 0 2px rgb(0 0 0 / 0.6);
+    /* No fill: it sits on the print's flat sky, which needs no help to stay readable. */
+
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -65,7 +65,7 @@ const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0
     display: inline-flex;
     align-items: center;
     gap: var(--s-75);
-    color: #ffffff;
+    color: var(--ink-100);
     font: 600 20px/28px var(--sans);
     letter-spacing: -0.02em;
   }
@@ -93,35 +93,28 @@ const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0
 
   .item:hover,
   .item[aria-current="page"] {
-    color: #ffffff;
+    color: var(--ink-100);
   }
 
-  /* The one button in the bar: see-through, with a plain white outline. */
+  /* The one button in the bar, in the site's ghost style (global.css). */
   .download {
     padding: var(--s-75) var(--s-200);
-    border: 1px solid rgb(255 255 255 / 0.85);
-    border-radius: 8px;
-    background: rgb(0 0 0 / 0.18);
-    color: #ffffff;
     font: 600 15px/20px var(--sans);
-    white-space: nowrap;
-    transition: background-color 300ms var(--curve);
   }
 
-  .download:hover,
   .download[aria-current="page"] {
-    background: rgb(255 255 255 / 0.08);
+    background: var(--ink-100);
+    color: var(--bg-0);
   }
 
   .stars svg {
     width: 16px;
     height: 16px;
-    color: #ffd166;
-    filter: drop-shadow(0 1px 4px rgb(0 0 0 / 0.7));
+    color: var(--ember-300);
   }
 
   .stars b {
-    color: #ffffff;
+    color: var(--ink-100);
     font-weight: 600;
   }
 

@@ -1,0 +1,13 @@
+{
+  "name": "Logia",
+  "short_name": "Logia",
+  "description": "A free, open source notes app for Vim users.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#111a36",
+  "theme_color": "#0e3f9e",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

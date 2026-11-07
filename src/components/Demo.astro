@@ -1,19 +1,49 @@
 ---
-// A recording of the real app. People who ask for less motion get the final frame instead.
+// A recording of the real app, as a silent looping video (a fraction of the GIF's weight). It only
+// plays while on screen, and people who ask for less motion keep the poster, its final frame.
 interface Props {
   name: "hero" | "agent" | "keyboard" | "tour" | "audio";
   alt: string;
   eager?: boolean;
 }
 const { name, alt, eager = false } = Astro.props;
+// VP9 only wins on the long hero recording; for the rest the MP4 is already smaller.
+const webm = name === "hero";
 ---
 
 <figure class="demo">
-  <picture>
-    <source srcset={`/demos/${name}-poster.png`} media="(prefers-reduced-motion: reduce)" />
-    <img src={`/demos/${name}.gif`} alt={alt} width="1200" height="750" loading={eager ? "eager" : "lazy"} decoding="async" />
-  </picture>
+  <video
+    class="rec"
+    role="img"
+    aria-label={alt}
+    width="1200"
+    height="750"
+    poster={`/demos/${name}-poster.webp`}
+    preload={eager ? "auto" : "none"}
+    muted
+    loop
+    playsinline
+    disablepictureinpicture
+  >
+    {webm && <source src={`/demos/${name}.webm`} type="video/webm" />}
+    <source src={`/demos/${name}.mp4`} type="video/mp4" />
+  </video>
 </figure>
+
+<script>
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const { target, isIntersecting } of entries) {
+        const video = target as HTMLVideoElement;
+        if (isIntersecting && !still.matches) video.play().catch(() => {});
+        else video.pause();
+      }
+    },
+    { rootMargin: "200px 0px" },
+  );
+  document.querySelectorAll<HTMLVideoElement>("video.rec").forEach((video) => seen.observe(video));
+</script>
 
 <style>
   /* 16px shell, 8px inset, 8px image radius (B3). */
@@ -24,10 +54,11 @@ const { name, alt, eager = false } = Astro.props;
     background: var(--bg-1);
   }
 
-  img {
+  .rec {
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 1200 / 750;
     border-radius: 8px;
     background: var(--bg-2);
   }

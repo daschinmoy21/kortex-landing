@@ -30,8 +30,8 @@ type Settings = {
 };
 
 const settings: Settings = {
-  // The atmosphere ramp's shape (deep, palest, pale, saturated) in the colors of the app's pixel scene.
-  colors: ["#7a2a0c", "#f7ecc4", "#f6ae5c", "#f47a35"],
+  // The atmosphere ramp's shape (deep, palest, pale, saturated) in the colors of the hero print.
+  colors: ["#111a36", "#fcecd6", "#f9cfa0", "#e46c61"],
   shape: 0,
   characters: " =+xX0S8#@",
   cellSize: 18,

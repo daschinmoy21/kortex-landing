@@ -21,6 +21,12 @@ import { links } from "../data/release";
     align-items: center;
     gap: var(--s-75) var(--s-200);
     padding-block: var(--s-300);
+    /* On the home page the footer sits on the bright dunes of the hero print, so the small text is
+       lifted to cream and given a soft dark halo. */
+    color: var(--ink-200);
+    text-shadow:
+      0 1px 2px rgb(4 6 16 / 0.7),
+      0 0 14px rgb(4 6 16 / 0.6);
   }
 
   .mark {
@@ -36,7 +42,7 @@ import { links } from "../data/release";
   nav a {
     display: inline-block;
     padding-block: var(--s-50);
-    color: var(--ink-400);
+    color: var(--ink-200);
     transition: color 300ms var(--curve);
   }
 

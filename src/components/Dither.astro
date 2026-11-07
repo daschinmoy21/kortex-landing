@@ -1,5 +1,5 @@
 ---
-// An ordered-dither (Bayer 8x8) haze drawn behind a card: a slow-drifting ember field that hangs
+// An ordered-dither (Bayer 8x8) haze drawn behind a card: a slow-drifting coral field that hangs
 // from the top edge and fades out before the card's text. The parent must be position: relative
 // with overflow hidden; content that should sit above it needs position: relative too.
 // x biases the brightest part of the haze across the card (0 left, 1 right), spread is how far down
@@ -74,9 +74,9 @@ const { x = 0.5, y = 0, spread = 0.8, cell = 3, class: className } = Astro.props
         const threshold = (bayer[(row % 8) * 8 + (col % 8)] + 0.5) / 64;
         if (v <= threshold) continue;
         const i = (row * w + col) * 4;
-        image.data[i] = 244;
-        image.data[i + 1] = 122;
-        image.data[i + 2] = 53;
+        image.data[i] = 228;
+        image.data[i + 1] = 108;
+        image.data[i + 2] = 97;
         image.data[i + 3] = Math.round(60 + 110 * v);
       }
     }
