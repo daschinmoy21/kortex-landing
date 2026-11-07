@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://getlogia.online/sitemap-index.xml
